@@ -8,14 +8,14 @@
 body {
   font-family: 'Inter', sans-serif;
   line-height: 1.6;
-  color: white;
+  color: #f9fafb;
   background-color: #000;
 }
 
 :root {
   --primary: linear-gradient(to top, #f97316 0%, #FBC105 100%);
-  --muted: #6b7280;
-  --card-bg: #fff;
+  --muted: white;
+  --card-bg: rgba(255, 255, 255, 0.65);
 }
 
 /* ==== MAIN CONTENT ==== */
@@ -35,7 +35,8 @@ header {
   left: 0;
   width: 100%;
   color: #f9fafb;
-  background: #1F1F1F;
+  background: #111827;
+  text-shadow: rgba(255, 255, 255, 0.2);
   border-bottom: 1px solid #e5e7eb;
   padding: 16px 32px;
   display: flex;
@@ -130,7 +131,7 @@ button:hover {
 .hero-card {
   min-width: 300px;
   background: var(--card-bg);
-  color: #1f2937;
+  color: #f9fafb;
   border-radius: 12px;
   padding: 24px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
@@ -213,7 +214,9 @@ button:hover {
 .types {
   display: flex;
   justify-content: space-between;
-  padding: 60px 40px;
+  background-color: rgba(0, 0, 0, 0.4);
+  padding: 24px;
+  border-radius: 12px;
   gap: 40px;
   flex-wrap: wrap;
 }
@@ -221,7 +224,7 @@ button:hover {
 .types .left {
   flex: 1;
   min-width: 300px;
-  color: #374151;
+  color: #f1f1f1;
 }
 
 .types .left h2 span {
@@ -274,6 +277,7 @@ button:hover {
 /* ==== FOOTER ==== */
 footer {
   background: #111827;
+  text-shadow: 0.5px 0.5px 1px rgba(255, 255, 255, 0.2);
   color: white;
   padding: 40px 20px;
 }
