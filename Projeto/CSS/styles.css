@@ -1,39 +1,57 @@
-/* ==== RESET ==== */
-* { margin: 0; padding: 0; box-sizing: border-box; }
+/* ==== RESET E BASE ==== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
 body {
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  background: #f9fafb;
-  color: #111827;
+  font-family: 'Inter', sans-serif;
   line-height: 1.6;
+  color: white;
+  background-color: #000;
 }
 
 :root {
-  --primary: #16a34a; /* Verde */
+  --primary: linear-gradient(to top, #f97316 0%, #FBC105 100%);
   --muted: #6b7280;
   --card-bg: #fff;
 }
 
+/* ==== MAIN CONTENT ==== */
+.main-content {
+  background-image: url('../image/back.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: white;
+  padding: 40px 20px;
+}
+
 /* ==== HEADER ==== */
 header {
-  background: white;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  color: #f9fafb;
+  background: #1F1F1F;
   border-bottom: 1px solid #e5e7eb;
   padding: 16px 32px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  z-index: 1000;
 }
 
-header h1 {
-  font-size: 20px;
+header .icon {
   font-weight: bold;
-  color: #111;
 }
 
 nav a {
   margin-left: 20px;
   text-decoration: none;
-  color: #111;
+  color: #f9fafb;
   font-weight: 500;
 }
 
@@ -43,7 +61,7 @@ nav a:hover {
 
 .btn-header {
   background: var(--primary);
-  color: white;
+  color: #f9fafb;
   padding: 10px 16px;
   border-radius: 6px;
   text-decoration: none;
@@ -55,8 +73,9 @@ nav a:hover {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 60px 40px;
+  padding: 120px 40px 60px;
   flex-wrap: wrap;
+  gap: 40px;
 }
 
 .hero-text {
@@ -70,8 +89,10 @@ nav a:hover {
   line-height: 1.2;
 }
 
-h2 span {
-  color: var(--primary);
+.hero-text h2 span {
+  background: var(--primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .hero-text p {
@@ -97,7 +118,7 @@ button {
 
 button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .btn-primary {
@@ -105,24 +126,36 @@ button:hover {
   color: white;
 }
 
-.btn-outline {
-  background: white;
-  border: 2px solid var(--primary);
-  color: var(--primary);
-}
-
-/* ==== CARD GENÉRICO ==== */
-.card {
+/* ==== HERO CARD ==== */
+.hero-card {
+  min-width: 300px;
   background: var(--card-bg);
+  color: #1f2937;
   border-radius: 12px;
   padding: 24px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
-.hero-card { min-width: 300px; }
-.hero-card h3 { margin-bottom: 12px; font-size: 18px; font-weight: bold; }
-.hero-card p { margin: 6px 0; }
-.final-value { margin-top: 12px; font-size: 20px; font-weight: bold; color: var(--primary); }
+.hero-card h3 {
+  margin-bottom: 12px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #111827;
+}
+
+.hero-card p {
+  margin: 6px 0;
+  color: #374151;
+}
+
+.hero-card .btn-primary {
+  display: inline-block;
+  margin-top: 8px;
+  padding: 10px 12px;
+  border-radius: 6px;
+  background: var(--primary);
+  color: white;
+}
 
 /* ==== BENEFÍCIOS ==== */
 .benefits {
@@ -130,8 +163,15 @@ button:hover {
   padding: 60px 20px;
 }
 
-.benefits h2 { font-size: 28px; margin-bottom: 8px; }
-.benefits p { color: var(--muted); margin-bottom: 32px; }
+.benefits h2 {
+  font-size: 28px;
+  margin-bottom: 8px;
+}
+
+.benefits p {
+  color: var(--muted);
+  margin-bottom: 32px;
+}
 
 .benefit-cards {
   display: grid;
@@ -139,7 +179,24 @@ button:hover {
   gap: 20px;
 }
 
-.benefit-cards .card:hover { transform: translateY(-5px); }
+.card {
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  color: #1f2937;
+  text-align: left;
+}
+
+.card h3 {
+  color: #111827;
+  margin-bottom: 8px;
+}
+
+.card p {
+  color: #374151;
+  font-size: 15px;
+}
 
 .card .icon {
   font-size: 30px;
@@ -147,7 +204,12 @@ button:hover {
   display: block;
 }
 
-/* ==== TIPOS ==== */
+.benefit-cards .card:hover {
+  transform: translateY(-5px);
+  transition: transform 0.2s;
+}
+
+/* ==== TIPOS DE RENDA FIXA ==== */
 .types {
   display: flex;
   justify-content: space-between;
@@ -156,16 +218,34 @@ button:hover {
   flex-wrap: wrap;
 }
 
-.types .left { flex: 1; min-width: 300px; }
-.types ul { margin: 16px 0; list-style: none; }
-.types ul li { margin-bottom: 8px; }
+.types .left {
+  flex: 1;
+  min-width: 300px;
+  color: #374151;
+}
+
+.types .left h2 span {
+  background: var(--primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.types ul {
+  margin: 16px 0;
+  list-style: none;
+}
+
+.types ul li {
+  margin-bottom: 8px;
+}
 
 .types .right {
   flex: 1;
   min-width: 280px;
   background: var(--card-bg);
   padding: 24px;
-  border-radius: 12px; 
+  border-radius: 12px;
+  color: #374151;
 }
 
 /* ==== CTA FINAL ==== */
@@ -179,7 +259,19 @@ button:hover {
   padding: 60px 20px;
 }
 
+.cta-final h2 span {
+  background: var(--primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
 
+.cta-final p {
+  max-width: 600px;
+  margin: 20px 0;
+  color: var(--muted);
+}
+
+/* ==== FOOTER ==== */
 footer {
   background: #111827;
   color: white;
@@ -196,16 +288,24 @@ footer {
   margin: 0 auto;
 }
 
-.footer-content h3 { margin-bottom: 4px; }
+.footer-content h3 {
+  margin-bottom: 4px;
+}
 
-.footer-links { display: flex; gap: 16px; }
+.footer-links {
+  display: flex;
+  gap: 16px;
+}
 
 .footer-links a {
   color: #d1d5db;
   text-decoration: none;
   font-size: 14px;
 }
-.footer-links a:hover { text-decoration: underline; }
+
+.footer-links a:hover {
+  text-decoration: underline;
+}
 
 .copy {
   margin-top: 24px;
@@ -216,30 +316,61 @@ footer {
   padding-top: 16px;
 }
 
-/* ==== RESPONSIVIDADE ==== */
+/* ==== RESPONSIVO ==== */
 @media (max-width: 992px) {
   .hero {
     flex-direction: column;
     text-align: center;
-    gap: 30px;
   }
 
-  .hero-text { max-width: 100%; }
+  .hero-text,
+  .hero-card {
+    max-width: 100%;
+  }
 
-  .types { flex-direction: column; text-align: center; }
-  .types .left, .types .right { min-width: 100%; }
+  .types {
+    flex-direction: column;
+    text-align: center;
+  }
 
-  .cta-final .buttons { flex-direction: column; gap: 12px; }
+  .cta-final .buttons {
+    flex-direction: column;
+    gap: 12px;
+  }
 }
 
 @media (max-width: 600px) {
-  header { flex-direction: column; gap: 16px; text-align: center; }
-  nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
-  nav a { margin: 0; }
+  header {
+    flex-direction: column;
+    gap: 16px;
+    text-align: center;
+  }
 
-  .hero-text h2 { font-size: 32px; }
-  .benefit-cards { grid-template-columns: 1fr; }
+  nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+  }
 
-  .footer-content { flex-direction: column; text-align: center; }
-  .footer-links { justify-content: center; }
+  nav a {
+    margin: 0;
+  }
+
+  .hero-text h2 {
+    font-size: 32px;
+  }
+
+  .benefit-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .footer-content {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .footer-links {
+    justify-content: center;
+  }
 }
