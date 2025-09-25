@@ -92,9 +92,11 @@ nav a:hover {
 }
 
 .hero-text h2 span {
-  background: var(--primary);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+   background: var(--primary);
+   background-clip: text;
+   -webkit-background-clip: text;
+   color: transparent;
+   -webkit-text-fill-color: transparent;
 }
 
 .hero-text p {
@@ -230,8 +232,10 @@ button:hover {
 
 .types .left h2 span {
   background: var(--primary);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  -webkit-background-clip: text; /* Garantir que funcione no Chrome/Safari */
+  color: transparent; 
+  -webkit-text-fill-color: transparent; 
 }
 
 .types ul {
@@ -264,8 +268,11 @@ button:hover {
 }
 
 .cta-final h2 span {
+  color: #f97316; /* Fallback para navegadores que não suportam gradiente no texto */
   background: var(--primary);
+  background-clip: text;
   -webkit-background-clip: text;
+  color: transparent;
   -webkit-text-fill-color: transparent;
 }
 
