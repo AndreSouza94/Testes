@@ -45,6 +45,19 @@ header {
   z-index: 1000;
 }
 
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.acesso-link {
+  color: var(--muted);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+
 nav a {
   margin-left: 20px;
   text-decoration: none;
@@ -65,9 +78,6 @@ nav a:hover {
   font-weight: 500;
 }
 
-.log-header {
-  margin-left: 700px;
-}
 
 /* ==== HERO ==== */
 .hero {

@@ -36,6 +36,7 @@ header {
 }
 
 
+
 .btn-header {
   background: var(--primary);
   color: #f9fafb;
@@ -50,8 +51,9 @@ main {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: calc(100vh - 120px);
-  padding: 20px;
+  min-height: calc(100vh - 200px);
+  padding: 100px 20px 60px;
+  margin-bottom: 120px; /* altura aproximada do footer */
 }
 
 .btn-primary {
@@ -69,7 +71,6 @@ main {
   min-width: 320px;
   height: 440px;
   margin: auto;
-  position: relative;
   transition: transform 0.8s;
   transform-style: preserve-3d;
 }
@@ -117,10 +118,8 @@ footer {
   background: #111827;   /* Preto */
   color: #f9fafb;        /* Texto branco */
   text-align: center;
-  padding: 20px;
-  position: fixed;
-  bottom: 0;
-  left: 0;
+  padding: 8px 16px;
+  font-size: 13px;
   width: 100%;
   border-top: 1px solid #e5e7eb;
 }
