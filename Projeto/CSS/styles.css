@@ -45,9 +45,6 @@ header {
   z-index: 1000;
 }
 
-header .icon {
-  font-weight: bold;
-}
 
 nav a {
   margin-left: 20px;
@@ -67,6 +64,10 @@ nav a:hover {
   border-radius: 6px;
   text-decoration: none;
   font-weight: 500;
+}
+
+.log-header {
+  margin-left: 700px;
 }
 
 /* ==== HERO ==== */
