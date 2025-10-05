@@ -7,20 +7,20 @@ import axios from "axios";
 export default function UploadForm() {
   const { state, dispatch } = useContext(AppContext);
   
-  // Chave TMDB API (v3) fornecida pelo usuário
+ 
   const TMDB_API_KEY = "918b7457f690598a36b2e7149a395d29"; 
   const API_BASE_URL = "https://api.themoviedb.org/3";
   
   const [query, setQuery] = useState("");
   const [releaseYear, setReleaseYear] = useState("");
   
-  // Lista de anos para o dropdown (cerca de 30 anos atrás até o próximo ano)
+ 
   const currentYear = new Date().getFullYear();
   const years = Array.from({ length: 35 }, (_, i) => currentYear - i).sort((a, b) => b - a);
 
   // Função central para buscar filmes na TMDB
   const fetchMovies = async (endpoint, params) => {
-    // Adiciona a chave API e o idioma português em todos os parâmetros
+   
     const allParams = {
       ...params,
       api_key: TMDB_API_KEY,
@@ -41,7 +41,7 @@ export default function UploadForm() {
     const trimmedQuery = query.trim();
     const trimmedYear = releaseYear.trim();
 
-    // Verificação 1: Verificação de preenchimento de campos obrigatórios na busca.
+    // Verificação de preenchimento de campos obrigatórios na busca.
     // Pelo menos o Título OU o Ano deve ser preenchido.
     if (!trimmedQuery && !trimmedYear) {
       return dispatch({ type: "ERROR", payload: "Por favor, digite um Título ou selecione um Ano para a busca." });
@@ -52,7 +52,7 @@ export default function UploadForm() {
       let results = [];
 
       if (trimmedQuery) {
-        // Se houver TÍTULO (query): Usar o endpoint SEARCH
+        
         const params = { query: trimmedQuery };
         if (trimmedYear) {
             params.primary_release_year = trimmedYear;
@@ -61,7 +61,7 @@ export default function UploadForm() {
         results = await fetchMovies("/search/movie", params);
 
       } else if (trimmedYear) {
-        // Se não houver TÍTULO, mas houver ANO: Usar o endpoint DISCOVER (populares daquele ano)
+        
         results = await fetchMovies("/discover/movie", {
           primary_release_year: trimmedYear,
           sort_by: "popularity.desc",
@@ -71,12 +71,12 @@ export default function UploadForm() {
       if (results.length === 0) {
         dispatch({ type: "ERROR", payload: "Nenhum filme encontrado com os critérios fornecidos." });
       } else {
-        // Envio dos dados para a API (TMDB) realizado com sucesso.
+        
         dispatch({ type: "SUCCESS", payload: results });
       }
 
     } catch (err) {
-      // Apresentação de mensagens de erro de validação depois do envio dos dados para a API.
+      
       const apiErrorData = err.response?.data;
       const errorMessage = apiErrorData?.status_message || apiErrorData?.message || "Falha na comunicação com a API de filmes.";
 
@@ -89,7 +89,7 @@ export default function UploadForm() {
   const isSearching = state.status === "uploading" || state.status === "processing";
   const statusMessage = state.status === "uploading" ? "Buscando Títulos..." : "Processando Dados...";
 
-  // Se a busca deu sucesso, o ResultCard será renderizado abaixo, e o formulário fica visível.
+  
 
   return (
     <Form onSubmit={handleSubmit} className="p-4 border rounded bg-white shadow-lg mx-auto" style={{ maxWidth: '700px' }}>

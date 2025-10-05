@@ -3,7 +3,7 @@ import { AppContext } from "./AppContext";
 import { appReducer, initialState } from "./appReducer";
 
 export function AppProvider({ children }) {
-  // Hook useReducer implementado
+  
   const [state, dispatch] = useReducer(appReducer, initialState);
 
   return (
