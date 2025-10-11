@@ -1,19 +1,94 @@
-# React + Vite
+# TMDBapi-app
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+O **TMDBapi-app** é uma aplicação React desenvolvida para a disciplina de **Programação Web Fullstack**.  
+O principal objetivo do projeto é demonstrar a integração de uma aplicação front-end com a API externa [The Movie Database (TMDB)](https://www.themoviedb.org/) para buscar e exibir informações sobre filmes.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Componentes Principais
 
-## React Compiler
+### `App.jsx`
+- Componente raiz da aplicação.
+- Responsável por renderizar:
+  - Título e subtítulo da aplicação.
+  - Componentes `UploadForm` e `ResultCard`.
+- Utiliza o `AppContext` para acessar o estado global.
+- Renderiza o `ResultCard` somente quando a busca é concluída (`state.status === 'done'`).
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### `UploadForm.jsx`
+- Gerencia o formulário de busca de filmes.
+- Controla os campos de entrada:
+  - `query` → Título do filme.
+  - `releaseYear` → Ano de lançamento.
+- Lógica de busca encapsulada na função `handleSubmit`:
+  - Faz requisições à API do TMDB usando `axios`.
+  - Atualiza o estado global (`dispatch`) com os status:
+    - `SEARCH_START`
+    - `SUCCESS`
+    - `ERROR`
+  - Armazena os resultados obtidos.
 
-## Expanding the ESLint configuration
+### `ResultCard.jsx`
+- Exibe os resultados da busca em uma lista de cartões (`Card`).
+- Cada cartão contém:
+  - Pôster do filme.
+  - Título.
+  - Nota média (`vote_average`).
+  - Ano de lançamento.
+  - Breve sinopse.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### `Loader.jsx`
+- Componente simples para exibir um **spinner de carregamento**.
+- Mostra uma mensagem informativa enquanto a busca está em andamento.
 
+---
 
-#https://www.themoviedb.org
+## Gerenciamento de Estado
+
+O estado global da aplicação é gerenciado utilizando a **Context API do React**.
+
+### `AppContext.js`
+- Cria o contexto da aplicação.
+
+### `appReducer.js`
+- Define a lógica para gestão do estado.
+- Status possíveis:
+  - `idle` → Inicial, sem busca realizada.
+  - `loading` → Busca em andamento.
+  - `done` → Busca concluída com sucesso.
+  - `error` → Erro durante a busca.
+- Armazena:
+  - Termo de busca.
+  - Lista de resultados.
+  - Mensagens de erro.
+
+### `AppProvider.jsx`
+- Componente que envolve toda a aplicação.
+- Fornece:
+  - Estado global.
+  - Função `dispatch` para atualizar o estado.
+
+---
+
+## Configurações e Dependências
+
+- **Bundler**: [Vite](https://vitejs.dev/)
+- **Linting**: ESLint configurado para garantir a qualidade do código.
+- **Dependências** (conforme `package.json`):
+  - `react`
+  - `react-dom`
+  - `axios`
+  - `bootstrap`
+  - `react-bootstrap`
+  - `gh-pages` (para deploy no GitHub Pages)
+
+---
+
+## Objetivos do Projeto
+
+- Demonstrar o desenvolvimento de uma **Single Page Application (SPA)** em React.
+- Cobrir conceitos como:
+  - Requisições HTTP assíncronas.
+  - Gerenciamento de estado global.
+  - Renderização condicional de componentes.
+  - Integração com APIs externas.

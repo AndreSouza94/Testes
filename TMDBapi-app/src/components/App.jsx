@@ -11,12 +11,11 @@ export default function App() {
     <Container className="my-5">
       <h1 className="text-center mb-4 text-primary">UTFPR - Projeto Web Fullstack</h1>
       <h3 className="text-center mb-5 text-secondary">Consulta de Filmes (TMDB API)</h3>
-      
+
       <UploadForm />
-      
-      {/* Exibe resultados após a busca (status done) */}
+
       {state.status === 'done' && <ResultCard />}
-      
+
     </Container>
   );
 }
