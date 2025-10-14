@@ -1,0 +1,287 @@
+/* assets/css/styles.css */
+
+/* VARIÁVEIS DE COR (Ajustar se já estiver no global.css) */
+:root {
+    --primary-color: #007bff; /* Azul vibrante */
+    --secondary-color: #6c757d; /* Cinza */
+    --background-color: #f4f7f9; /* Fundo suave */
+    --card-background: #ffffff; 
+    --text-color: #333;
+    --success-color: #28a745; 
+    --tax-color: #dc3545; 
+}
+
+/* Base e Header (Adicione o CSS do seu global.css aqui se necessário) */
+body {
+    background-color: var(--background-color);
+    font-family: Arial, sans-serif;
+    color: var(--text-color);
+    margin: 0;
+}
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+.main-header {
+    background-color: #ffffff;
+    padding: 15px 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+.main-header nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.main-header .logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: var(--primary-color);
+    text-decoration: none;
+}
+.main-header ul {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+.main-header a {
+    text-decoration: none;
+    color: var(--text-color);
+    padding: 5px 10px;
+    transition: color 0.3s;
+}
+.main-header a:hover, .main-header a.active {
+    color: var(--primary-color);
+    font-weight: bold;
+}
+
+/* Layout Principal */
+.calculator-page {
+    padding: 40px 20px;
+    min-height: 80vh;
+}
+
+.calculator-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 30px;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+@media (min-width: 992px) {
+    .calculator-grid {
+        grid-template-columns: 1fr 1fr; 
+    }
+}
+
+/* Estilo do Card (Input e Resultado) */
+.card {
+    background-color: var(--card-background);
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.input-section h1 {
+    font-size: 28px;
+    color: var(--primary-color);
+    margin-bottom: 5px;
+}
+
+.input-section .description {
+    color: var(--secondary-color);
+    margin-bottom: 25px;
+}
+
+/* Formulário */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--text-color);
+}
+
+.form-group input, 
+.form-group select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: border-color 0.3s;
+    box-sizing: border-box; 
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    border-color: var(--primary-color);
+    outline: none;
+}
+
+/* Botões */
+#calculate-btn, .secondary-btn, .primary-btn-alt {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 8px;
+    font-size: 17px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background-color 0.3s, opacity 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+#calculate-btn {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+#calculate-btn:hover:not(:disabled) {
+    background-color: #0056b3;
+}
+
+#calculate-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.secondary-btn {
+    background-color: #e9ecef;
+    color: var(--secondary-color);
+}
+
+.secondary-btn:hover {
+    background-color: #dae0e5;
+}
+
+/* Seção de Resultados */
+.results-section {
+    position: sticky;
+    top: 20px; 
+}
+
+.results-section h2 {
+    font-size: 24px;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 15px;
+    margin-bottom: 25px;
+    color: var(--text-color);
+}
+
+/* Caixa de Resumo (Destaque do Valor Final) */
+.summary-box {
+    background-color: var(--background-color);
+    border-radius: 8px;
+    padding: 15px 20px;
+    margin-bottom: 15px;
+    text-align: center;
+    border-left: 5px solid var(--secondary-color);
+}
+
+.summary-box.primary {
+    border-left-color: var(--primary-color);
+    background-color: #e7f4ff; 
+}
+
+.summary-box p {
+    font-size: 16px;
+    color: var(--secondary-color);
+    margin-bottom: 5px;
+}
+
+.highlight-value {
+    display: block;
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--primary-color);
+}
+
+/* Detalhamento (Breakdown) */
+.breakdown {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px dashed #ccc;
+}
+
+.breakdown h3 {
+    font-size: 18px;
+    margin-bottom: 15px;
+    color: var(--text-color);
+}
+
+.detail-item, .total-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    font-size: 15px;
+    border-bottom: 1px dotted #eee;
+}
+
+.detail-item span:last-child {
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.detail-item.tax span:first-child {
+    color: var(--tax-color);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.total-item {
+    font-size: 17px;
+    font-weight: 700;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 2px solid var(--primary-color);
+}
+
+.success-text {
+    color: var(--success-color) !important;
+}
+
+/* Exportação e Comparação */
+.export-options {
+    display: flex;
+    gap: 10px;
+    margin-top: 30px;
+}
+
+.export-options button {
+    flex: 1;
+    padding: 12px;
+    font-size: 16px;
+}
+
+.primary-btn-alt {
+    background-color: var(--success-color);
+    color: white;
+    border: none;
+}
+
+.primary-btn-alt:hover {
+    background-color: #1e7e34;
+}
+
+/* Utility Class */
+.hidden {
+    display: none;
+}
+.main-footer {
+    text-align: center;
+    padding: 20px 0;
+    margin-top: 20px;
+    border-top: 1px solid #eee;
+    background-color: var(--card-background);
+    color: var(--secondary-color);
+}

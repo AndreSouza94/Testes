@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Renda Fixa - Certificadora</title>
+    <link rel="stylesheet" href="assets/css/global.css">
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="container">
+            <nav>
+                <a href="index.html" class="logo">Certificadora</a>
+                <ul>
+                    <li><a href="calculadora.html" class="active">Calculadora</a></li>
+                    <li><a href="comparacao.html">Comparação</a></li>
+                    <li><a href="#">Simulador Completo</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="calculator-page container">
+        <section class="calculator-grid">
+            <div class="input-section card">
+                <h1>Simulação de Investimento</h1>
+                <p class="description">Preencha os dados e calcule o retorno líquido do seu investimento em Renda Fixa.</p>
+
+                <form id="calculator-form">
+                    
+                    <div class="form-group">
+                        <label for="investment-type">Tipo de Investimento</label>
+                        <select id="investment-type" required>
+                            <option value="tesouro-selic">Tesouro Selic</option>
+                            <option value="cdb-pos">CDB Pós-Fixado (Ex: 100% CDI)</option>
+                            <option value="lci-lca">LCI/LCA (Isento de IR)</option>
+                            <option value="cdb-pre">CDB Pré-Fixado</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="initial-value">Valor Inicial (R$)</label>
+                        <input type="number" id="initial-value" min="1" step="0.01" placeholder="Ex: 5000" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="term-months">Prazo (Meses)</label>
+                        <input type="number" id="term-months" min="1" max="120" placeholder="Ex: 24 (2 anos)" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="annual-rate">Taxa Anual (%)</label>
+                        <input type="number" id="annual-rate" step="0.01" min="0.01" placeholder="Ex: 11.5 (Selic ou CDI)" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="monthly-contribution">Aporte Mensal (R$)</label>
+                        <input type="number" id="monthly-contribution" min="0" step="0.01" placeholder="Opcional: 100" value="0">
+                    </div>
+
+                    <button type="submit" id="calculate-btn">
+                        <i class="fas fa-calculator"></i>
+                        Simular Investimento
+                    </button>
+                    
+                    <button type="button" class="secondary-btn" onclick="document.getElementById('calculator-form').reset()">
+                        <i class="fas fa-redo"></i>
+                        Limpar Formulário
+                    </button>
+                </form>
+            </div>
+
+            <div class="results-section card hidden" id="results-area">
+                <h2>Resultado da Simulação</h2>
+                <div class="summary-box">
+                    <p>Valor Final Bruto</p>
+                    <span id="gross-value" class="highlight-value">R$ 0,00</span>
+                </div>
+
+                <div class="summary-box primary">
+                    <p>Valor Final Líquido</p>
+                    <span id="net-value" class="highlight-value">R$ 0,00</span>
+                </div>
+
+                <div class="breakdown">
+                    <h3>Discriminação Detalhada</h3>
+                    <div class="detail-item">
+                        <span>Rendimento Bruto</span>
+                        <span id="gross-profit">R$ 0,00</span>
+                    </div>
+                    <div class="detail-item tax">
+                        <span><i class="fas fa-minus-circle"></i> IRRF (Imposto de Renda)</span>
+                        <span id="irrf-tax">R$ 0,00</span>
+                    </div>
+                    <div class="detail-item tax">
+                        <span><i class="fas fa-minus-circle"></i> IOF (Imposto sobre Operações Financeiras)</span>
+                        <span id="iof-tax">R$ 0,00</span>
+                    </div>
+                    <div class="detail-item tax">
+                        <span><i class="fas fa-minus-circle"></i> Taxas (Ex: Custódia)</span>
+                        <span id="fees">R$ 0,00</span>
+                    </div>
+                    <div class="total-item">
+                        <span><i class="fas fa-check-circle"></i> Rendimento Líquido Total</span>
+                        <span id="net-profit" class="success-text">R$ 0,00</span>
+                    </div>
+                </div>
+
+                <div class="export-options">
+                    <button id="export-csv-btn" class="secondary-btn">
+                        <i class="fas fa-file-csv"></i> Exportar para CSV
+                    </button>
+                    <button id="compare-btn" class="primary-btn-alt" onclick="window.location.href='comparacao.html'">
+                        <i class="fas fa-chart-bar"></i> Comparar Cenários
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="main-footer">
+        <div class="container">
+            <p>&copy; 2024 Certificadora Específica. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="assets/js/api.js"></script>
+    <script src="assets/js/main.js"></script>
+</body>
+</html>
