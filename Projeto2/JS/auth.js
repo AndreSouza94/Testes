@@ -1,6 +1,3 @@
-// assets/js/auth.js
-
-// Função de Logout
 function handleLogout(e) {
     e.preventDefault();
     localStorage.removeItem('token');
@@ -21,7 +18,7 @@ function updateHeaderUI() {
     headerActions.innerHTML = ''; // Limpa as ações existentes
 
     if (token && userName) {
-        // Usuário Logado: Exibe nome e botão/link de Logout
+        
         
         // Exibe "Olá, Nome" (primeiro nome)
         const welcomeSpan = document.createElement('span');
@@ -48,7 +45,7 @@ function updateHeaderUI() {
         const calcularLink = document.createElement('a');
         calcularLink.className = 'btn-header';
         calcularLink.href = 'calculadora.html';
-        calcularLink.textContent = 'Calcular Agora';
+        calcularLink.textContent = 'Começar Simulação';
 
         headerActions.appendChild(acessoLink);
         headerActions.appendChild(calcularLink);

@@ -167,8 +167,6 @@ document.addEventListener('DOMContentLoaded', () => {
             custoTotal: custoTotal 
         };
     };
-    
-    // --- Fim da Lógica de Cálculo Local ---
 
     /**
      * Função principal de submissão do formulário.
