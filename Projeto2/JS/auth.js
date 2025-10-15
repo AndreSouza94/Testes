@@ -37,15 +37,10 @@ function updateHeaderUI() {
     } else {
         // Usuário Não Logado: Exibe link de Acesso
         const acessoLink = document.createElement('a');
-        acessoLink.className = 'acesso-link';
-        acessoLink.href = 'login.html';
-        acessoLink.textContent = 'Acesso';
-        
-        // Botão "Calcular Agora" 
         const calcularLink = document.createElement('a');
         calcularLink.className = 'btn-header';
-        calcularLink.href = 'calculadora.html';
-        calcularLink.textContent = 'Começar Simulação';
+        calcularLink.href = 'login.html';
+        calcularLink.textContent = 'Acesso';
 
         headerActions.appendChild(acessoLink);
         headerActions.appendChild(calcularLink);
