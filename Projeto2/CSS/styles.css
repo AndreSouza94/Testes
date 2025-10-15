@@ -55,6 +55,7 @@ header {
   color: var(--muted);
   text-decoration: none;
   font-weight: 500;
+  white-space: nowrap; /* Adicionado para evitar quebra de linha no nome do usuário */
 }
 
 

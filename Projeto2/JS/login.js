@@ -77,8 +77,8 @@ const localLogin = (payload) => {
             message: "Autenticação realizada com sucesso.",
             token: token,
             idUsuario: user.idUsuario,
-            // Apenas para fins de teste, você pode definir o primeiro usuário registrado como admin:
-            isAdm: user.isAdm // Mantido para futuras implementações, mas é false por padrão
+            Nome: user.Nome, // ADICIONADO: Retorna o nome do usuário
+            isAdm: user.isAdm 
         };
     } else {
         return { success: false, message: "Login inválido. Verifique suas credenciais." };
@@ -109,12 +109,10 @@ document.querySelector(".form-side form").addEventListener("submit", function(e)
     if (data.success) {
         localStorage.setItem("token", data.token);
         localStorage.setItem("idUsuario", data.idUsuario);
+        localStorage.setItem("userName", data.Nome); // SALVA O NOME DO USUÁRIO
         
-        // CORREÇÃO: Redireciona para o index.html, que é sua página principal.
+        // Redireciona para o index.html, que é sua página principal.
         window.location.href = "index.html"; 
-        // Se você tiver uma área administrativa separada e quiser usar a lógica de admin:
-        // window.location.href = data.isAdm ? "admin.html" : "index.html";
-
     } else {
         alert(data.message); 
     }
@@ -135,7 +133,7 @@ document.querySelector(".form-back form").addEventListener("submit", function(e)
     }
 
     // Validação do e-mail
-    const emailRegex = /^[a-zA-Z0-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
     if (!emailRegex.test(cadEmail)) {
         alert("Email inválido. Por favor, insira um email válido.");
         return;
