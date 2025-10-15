@@ -14,7 +14,78 @@ toLogin.addEventListener("click", (e) => {
     cardFlip.classList.remove("flip");
 });
 
-// Função de login
+// --- Funções de Simulação de Backend (Armazenamento Local) ---
+
+/**
+ * Obtém a lista de usuários armazenada localmente.
+ * @returns {Array} Array de objetos de usuário.
+ */
+const getLocalUsers = () => {
+    const users = localStorage.getItem('localUsers');
+    return users ? JSON.parse(users) : [];
+};
+
+/**
+ * Salva a lista atualizada de usuários localmente.
+ * @param {Array} users - Array de objetos de usuário.
+ */
+const saveLocalUsers = (users) => {
+    localStorage.setItem('localUsers', JSON.stringify(users));
+};
+
+/**
+ * Simula o registro de um novo usuário localmente.
+ */
+const localRegister = (payload) => {
+    const users = getLocalUsers();
+
+    // 1. Verifica se o e-mail já está em uso
+    if (users.some(user => user.Email === payload.Email)) {
+        return { success: false, message: "Este e-mail já está cadastrado." };
+    }
+
+    // 2. Cria e armazena o novo usuário
+    const newUserId = Math.floor(Math.random() * 100000) + 1;
+    const newUser = {
+        idUsuario: newUserId,
+        Nome: payload.Nome,
+        Email: payload.Email,
+        Senha: payload.Senha,
+        isAdm: false 
+    };
+
+    users.push(newUser);
+    saveLocalUsers(users);
+
+    return { success: true, message: "Cadastro realizado com sucesso." };
+};
+
+/**
+ * Simula o login de um usuário localmente.
+ */
+const localLogin = (payload) => {
+    const users = getLocalUsers();
+
+    // 1. Encontra o usuário pelo e-mail e senha
+    const user = users.find(u => u.Email === payload.Email && u.Senha === payload.Senha);
+
+    if (user) {
+        // 2. Retorna dados de sucesso (simulando token)
+        const token = `local_token_${Math.random().toString(36).substring(2)}`;
+        return {
+            success: true,
+            message: "Autenticação realizada com sucesso.",
+            token: token,
+            idUsuario: user.idUsuario,
+            // Apenas para fins de teste, você pode definir o primeiro usuário registrado como admin:
+            isAdm: user.isAdm // Mantido para futuras implementações, mas é false por padrão
+        };
+    } else {
+        return { success: false, message: "Login inválido. Verifique suas credenciais." };
+    }
+};
+
+// --- Função de login (Utilizando simulação local) ---
 document.querySelector(".form-side form").addEventListener("submit", function(e) {
     e.preventDefault();
 
@@ -32,30 +103,24 @@ document.querySelector(".form-side form").addEventListener("submit", function(e)
         Senha: loginSenha
     };
 
-    fetch('URL', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(payload)
-    })
-    .then(res => res.json())
-    .then(data => {
-        if (data.message === "Autenticação realizada com sucesso.") {
-            localStorage.setItem("token", data.token);
-            localStorage.setItem("idUsuario", data.idUsuario);
-            window.location.href = data.isAdm ? "admin.html" : "home.html";
-        } else {
-            alert("Login inválido. Verifique suas credenciais.");
-        }
-    })
-    .catch(err => {
-        console.error("Erro ao conectar com o servidor:", err.message);
-        alert("Erro ao conectar com o servidor.");
-    });
+    // Chamada à função de login local
+    const data = localLogin(payload);
+    
+    if (data.success) {
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("idUsuario", data.idUsuario);
+        
+        // CORREÇÃO: Redireciona para o index.html, que é sua página principal.
+        window.location.href = "index.html"; 
+        // Se você tiver uma área administrativa separada e quiser usar a lógica de admin:
+        // window.location.href = data.isAdm ? "admin.html" : "index.html";
+
+    } else {
+        alert(data.message); 
+    }
 });
 
-// Função de cadastro
+// --- Função de cadastro (Utilizando simulação local) ---
 document.querySelector(".form-back form").addEventListener("submit", function(e) {
     e.preventDefault();
 
@@ -70,7 +135,7 @@ document.querySelector(".form-back form").addEventListener("submit", function(e)
     }
 
     // Validação do e-mail
-    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+    const emailRegex = /^[a-zA-Z0-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
     if (!emailRegex.test(cadEmail)) {
         alert("Email inválido. Por favor, insira um email válido.");
         return;
@@ -88,24 +153,14 @@ document.querySelector(".form-back form").addEventListener("submit", function(e)
         Senha: cadSenha
     };
 
-    fetch('URL', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(payload)
-    })
-    .then(res => res.json())
-    .then(data => {
-        if (data.message === "Cadastro realizado com sucesso.") {
-            alert("Cadastro realizado com sucesso!");
-            window.location.href = "index.html"; // Redireciona para a página de login
-        } else {
-            alert("Erro ao cadastrar. Tente novamente.");
-        }
-    })
-    .catch(err => {
-        console.error("Erro ao conectar com o servidor:", err.message);
-        alert("Erro ao conectar com o servidor.");
-    });
+    // Chamada à função de cadastro local
+    const data = localRegister(payload);
+    
+    if (data.success) {
+        alert("Cadastro realizado com sucesso! Faça seu login.");
+        // Após o cadastro, volta para a tela de login
+        cardFlip.classList.remove("flip"); 
+    } else {
+        alert(data.message); 
+    }
 });
