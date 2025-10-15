@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login / Cadastro</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="./CSS/login.css">
+</head>
+<body>
+
+  <header>
+    <nav>
+      <a class="btn-header" href="index.html">📊 Calculadora Renda Fixa</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="card-container">
+      <div class="card-flip" id="cardFlip">
+
+        <!-- Lado Login -->
+        <div class="form-side">
+          <h3 class="text-center mb-4">Login</h3>
+          <form>
+            <div class="mb-3">
+              <label for="loginEmail" class="form-label">E-mail</label>
+              <input type="email" class="form-control" id="loginEmail" placeholder="Digite seu e-mail" required>
+            </div>
+            <div class="mb-3">
+              <label for="loginSenha" class="form-label">Senha</label>
+              <input type="password" class="form-control" id="loginSenha" placeholder="Digite sua senha" required>
+            </div>
+            <button type="submit" class="btn-primary w-100">Entrar</button>
+          </form>
+          <p class="text-center mt-3">
+            Não tem conta? <a href="#" id="toRegister">Cadastre-se</a>
+          </p>
+        </div>
+
+        <!-- Lado Cadastro -->
+        <div class="form-side form-back">
+          <h3 class="text-center mb-4">Cadastro</h3>
+          <form>
+            <div class="mb-3">
+              <label for="nome" class="form-label">Nome</label>
+              <input type="text" class="form-control" id="nome" placeholder="Digite seu nome" required>
+            </div>
+            <div class="mb-3">
+              <label for="cadEmail" class="form-label">E-mail</label>
+              <input type="email" class="form-control" id="cadEmail" placeholder="Digite seu e-mail" required>
+            </div>
+            <div class="mb-3">
+              <label for="cadSenha" class="form-label">Senha</label>
+              <input type="password" class="form-control" id="cadSenha" placeholder="Crie sua senha" required>
+            </div>
+            <button type="submit" class="btn btn-success w-100">Cadastrar</button>
+          </form>
+          <p class="text-center mt-3">
+            Já tem conta? <a href="#" id="toLogin">Entrar</a>
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p class="copy">© 2025 Calculadora Renda Fixa. Ferramenta educativa para simulação de investimentos.</p>
+  </footer>
+
+  <script src="./JS/login.js"></script>
+</body>
+</html>

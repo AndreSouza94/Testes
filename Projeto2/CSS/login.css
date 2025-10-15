@@ -1,0 +1,136 @@
+/* ==== RESET E BASE ==== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  line-height: 1.6;
+  background-color: #f9fafb;
+}
+
+:root {
+  --primary: linear-gradient(to top, #f97316 0%, #FBC105 100%);
+  --muted: white;
+  --card-bg: rgba(255, 255, 255, 0.65);
+}
+
+
+/* ==== HEADER ==== */
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  color: #f9fafb;
+  background: #111827;
+  text-shadow: rgba(255, 255, 255, 0.2);
+  border-bottom: 1px solid #e5e7eb;
+  padding: 16px 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 1000;
+}
+
+
+
+.btn-header {
+  background: var(--primary);
+  color: #f9fafb;
+  padding: 10px 16px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+/* ==== FORM LOGIN/CARD ==== */
+main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 200px);
+  padding: 100px 20px 60px;
+  margin-bottom: 120px; /* altura aproximada do footer */
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: white;
+}
+
+.card-container {
+  perspective: 1000px;
+}
+
+.card-flip {
+  width: 100%;
+  max-width: 400px;
+  min-width: 320px;
+  height: 440px;
+  margin: auto;
+  transition: transform 0.8s;
+  transform-style: preserve-3d;
+}
+
+.card-flip.flip {
+  transform: rotateY(180deg);
+}
+
+.card-flip .form-control {
+  width: 100%;
+}
+
+/* Centralizar textos */
+.card-flip h3 {
+  text-align: center;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+/* Ajustar espaçamento dos parágrafos */
+.card-flip p {
+  font-size: 14px;
+  text-align: center;
+  margin-top: 10px;
+}
+
+.form-side {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  backface-visibility: hidden;
+  padding: 30px;
+}
+
+.form-back {
+  transform: rotateY(180deg);
+}
+
+
+/* ==== FOOTER ==== */
+footer {
+  background: #111827;   /* Preto */
+  color: #f9fafb;        /* Texto branco */
+  text-align: center;
+  padding: 8px 16px;
+  font-size: 13px;
+  width: 100%;
+  border-top: 1px solid #e5e7eb;
+}
+
+.copy {
+  margin-top: 24px;
+  font-size: 14px;
+  color: #9ca3af;
+  text-align: center;
+  border-top: 1px solid #374151;
+  padding-top: 16px;
+}
+
+
