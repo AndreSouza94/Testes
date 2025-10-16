@@ -7,7 +7,7 @@
         window.location.href = 'login.html'; 
     }
 })();
-// ** Fim da Lógica de Restrição de Acesso **
+
 
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     /**
-     * Função auxiliar para formatar um número como moeda BRL.
+     * Função formatar um número como moeda BRL.
      */
     const formatCurrency = (value) => {
         const numberValue = parseFloat(value);
@@ -67,9 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Sugere um valor inicial de 0.25 ao ativar, 0 ao desativar
         document.getElementById('annual-fee').value = e.target.checked ? '0.25' : '0';
     });
-    // --- Fim da Lógica Condicional ---
-
-    // --- Lógica de Cálculo Implementada Localmente (ATUALIZADA) ---
+    
     
     // Tabela regressiva do Imposto de Renda (IRRF) para Renda Fixa (RN04)
     // Prazo em dias
