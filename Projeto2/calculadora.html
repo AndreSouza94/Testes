@@ -1,162 +1,73 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora de Renda Fixa - Simulação</title>
-    <link rel="stylesheet" href="./CSS/calculadora.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calculadora de Investimentos</title>
+  <link rel="stylesheet" href="./CSS/calculadora.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
 <body>
 
-    <header class="main-header">
-        <div class="container">
-            <nav>
-                <a href="index.html" class="logo">Certificadora</a>
-                <ul>
-                    <li><a href="calculadora.html" class="active">Calculadora</a></li>
-                    <li><a href="comparacao.html">Comparação</a></li>
-                </ul>
-            </nav>
-        </div>
-    </header>
+  <!-- HEADER -->
+  <header class="header">
+    <div class="logo">💰 InvestCalc</div>
+    <a href="index.html" class="btn-voltar">← Voltar</a>
+  </header>
 
-    <main class="calculator-page container">
-        <section class="calculator-grid">
-            <div class="input-section card">
-                <h1>Dados do Investimento</h1>
-                <p class="description">Preencha os dados e calcule o retorno líquido do seu investimento em Renda Fixa.</p>
-
-                <form id="calculator-form">
-                    
-                    <div class="form-group">
-                        <label for="investment-type">Tipo de Investimento</label>
-                        <select id="investment-type" required>
-                            <option value="tesouro-direto">Tesouro Direto</option>
-                            <option value="cdb">CDB</option>
-                            <option value="lci">LCI</option>
-                            <option value="lca">LCA</option>
-                            <option value="cri">CRI</option>
-                            <option value="cra">CRA</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="initial-value">Valor Inicial (R$)</label> <input type="number" id="initial-value" min="1" step="0.01" placeholder="Ex: 10000" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="term-years">Tempo (em anos)</label> <input type="number" id="term-years" min="1" max="50" placeholder="Ex: 2" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="annual-rate">Taxa de Juros Anual (%)</label> <input type="number" id="annual-rate" step="0.01" min="0.01" placeholder="Ex: 11.5" required>
-                    </div>
-
-                    <div class="form-check mb-3">
-                        <input class="form-check-input" type="checkbox" id="include-contribution-check">
-                        <label class="form-check-label" for="include-contribution-check">
-                            Incluir aportes mensais? 
-                        </label>
-                    </div>
-                    
-                    <div class="form-group" id="monthly-contribution-group" style="display: none;">
-                        <label for="monthly-contribution">Valor do aporte mensal (R$)</label>
-                        <input type="number" id="monthly-contribution" min="0" step="0.01" placeholder="Ex: 100" value="0">
-                    </div>
-                    
-                    <div class="form-check mb-3">
-                        <input class="form-check-input" type="checkbox" id="include-fee-check">
-                        <label class="form-check-label" for="include-fee-check">
-                            Incluir Taxa de Custódia Anual (%)?
-                        </label>
-                    </div>
-
-                    <div class="form-group" id="annual-fee-group" style="display: none;">
-                        <label for="annual-fee">Taxa de Custódia Anual (%)</label>
-                        <input type="number" id="annual-fee" step="0.01" min="0" placeholder="Ex: 0.25" value="0">
-                    </div>
-                    
-                    <div class="form-check mb-3">
-                        <input class="form-check-input" type="checkbox" id="simulate-early-sale-check">
-                        <label class="form-check-label" for="simulate-early-sale-check">
-                            Simular Venda Antecipada?
-                        </label>
-                    </div>
-
-                    <button type="submit" id="calculate-btn" class="mb-2"> <i class="fas fa-calculator"></i>
-                        Calcular Investimento
-                    </button>
-                    
-                    <button type="button" class="secondary-btn" onclick="window.location.href='comparacao.html'">
-                        Comparar com Outros Investimentos
-                    </button>
-                </form>
-            </div>
-
-            <div class="results-section card hidden" id="results-area">
-                <h2>Resultado do Investimento</h2>
-                
-                <div class="row row-cols-2 g-3 mb-4">
-                    <div class="col">
-                        <div class="summary-box" style="background-color: var(--liquid-bg); border-left-color: var(--liquid-border);">
-                            <p>Valor Bruto</p>
-                            <span id="gross-value" class="highlight-value">R$ 0,00</span> </div>
-                    </div>
-                    <div class="col">
-                        <div class="summary-box" style="background-color: var(--liquid-bg); border-left-color: var(--liquid-border);">
-                            <p>Valor Líquido</p>
-                            <span id="net-value" class="highlight-value">R$ 0,00</span> </div>
-                    </div>
-                    <div class="col">
-                        <div class="summary-box" style="background-color: var(--liquid-bg); border-left-color: var(--liquid-border);">
-                            <p>Lucro Bruto</p>
-                            <span id="gross-profit" class="highlight-value">R$ 0,00</span> </div>
-                    </div>
-                    <div class="col">
-                        <div class="summary-box" style="background-color: var(--cost-bg); border-left-color: var(--cost-border);">
-                            <p>Custo Total</p>
-                            <span id="total-costs" class="highlight-value">R$ 0,00</span> </div>
-                    </div>
-                </div>
-                <div class="breakdown">
-                    <h3>Detalhamento dos Custos</h3> <div class="detail-item" id="irrf-detail">
-                        <span>Imposto de Renda (IR)</span>
-                        <span id="irrf-tax">R$ 0,00</span> </div>
-                    
-                    <div class="detail-item" id="custody-fee-detail" style="display: none;">
-                        <span>Taxa de Custódia</span> 
-                        <span id="custody-fee">R$ 0,00</span> </div>
-                    
-                    <div class="detail-item" id="iof-detail" style="display: none;">
-                        <span>IOF</span>
-                        <span id="iof-tax">R$ 0,00</span> </div>
-
-                    <div class="total-item">
-                        <span>Total de Custos</span> 
-                        <span id="total-costs-value" class="tax-text">R$ 0,00</span> 
-                    </div>
-                </div>
-
-                <div class="export-options">
-                    <button id="export-csv-btn" class="secondary-btn">
-                        <i class="fas fa-file-csv"></i> Exportar para CSV </button>
-                </div>
-                
-                <div class="alert-box">
-                    Aviso: Esta é uma simulação educativa. Os valores reais podem variar conforme as condições do mercado e regulamentações vigentes. Consulte sempre um consultor financeiro antes de tomar decisões de investimento.
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <footer class="main-footer">
-        <div class="container">
-            <p class="copy">© 2025 Calculadora Renda Fixa. Ferramenta educativa para simulação de investimentos.</p>
-        </div>
-    </footer>
-
+  <!-- CONTAINER PRINCIPAL -->
+  <main class="container">
     
-    <script src="./JS/calc.js"></script>
+    <!-- TÍTULO -->
+    <h1 class="titulo">Simulador de Investimentos</h1>
+    <p class="subtitulo">Compare rendimentos com base na taxa SELIC / CDI / IPCA</p>
+
+    <!-- CARDS DE TAXAS (render via JS ou mock) -->
+    <section class="taxas-container" id="taxas-container">
+      <!-- Cards de taxa serão inseridos via JS -->
+    </section>
+
+    <!-- FORMULÁRIO -->
+    <section class="form-container">
+      <h2 class="secao-titulo">Preencha os dados para simular</h2>
+
+      <form id="form-calculadora">
+        <div class="form-grupo">
+          <label>Tipo de Investimento</label>
+          <select id="tipo">
+            <option value="cdb">CDB (Tributado)</option>
+            <option value="lci">LCI/LCA (Isento IR)</option>
+            <option value="tesouro">Tesouro Direto</option>
+          </select>
+        </div>
+
+        <div class="form-grupo">
+          <label>Valor Investido (R$)</label>
+          <input type="number" id="valor" placeholder="Ex: 1000" required />
+        </div>
+
+        <div class="form-grupo">
+          <label>Tempo (em meses)</label>
+          <input type="number" id="tempo" placeholder="Ex: 12" required />
+        </div>
+
+        <div class="form-grupo">
+          <label>Rentabilidade (% do CDI)</label>
+          <input type="number" id="rentabilidade" placeholder="Ex: 100" required />
+        </div>
+
+        <button type="submit" class="btn-calcular">Calcular</button>
+      </form>
+    </section>
+
+    <!-- RESULTADOS -->
+    <section class="resultado-container" id="resultado-container">
+      <!-- Resultado gerado via JS -->
+    </section>
+
+  </main>
+
+  <script src="./JS/calculadora.js"></script>
 </body>
 </html>

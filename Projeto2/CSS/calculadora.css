@@ -1,323 +1,193 @@
-/* assets/css/styles.css */
-
-/* VARIÁVEIS DE COR (Ajustar se já estiver no global.css) */
-:root {
-    --primary-color: #007bff; /* Azul vibrante */
-    --secondary-color: #6c757d; /* Cinza */
-    --background-color: #f4f7f9; /* Fundo suave */
-    --card-background: #ffffff; 
-    --text-color: #333;
-    --success-color: #28a745; 
-    --tax-color: #dc3545; 
-    /* NOVAS CORES DO PROTÓTIPO (RF17/RF20) */
-    --liquid-bg: #e6ffe6; /* Verde claro do Valor Líquido/Lucro Bruto */
-    --liquid-border: #009900;
-    --cost-bg: #ffe6e6; /* Vermelho claro do Custo Total */
-    --cost-border: #ff0000;
+/* ===== RESET BÁSICO ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
 }
 
-/* Base e Header (Adicione o CSS do seu global.css aqui se necessário) */
 body {
-    background-color: var(--background-color);
-    font-family: Arial, sans-serif;
-    color: var(--text-color);
-    margin: 0;
+  background: #0d0d0f;
+  color: #fff;
+  padding-bottom: 50px;
 }
+
+/* ===== HEADER ===== */
+.header {
+  width: 100%;
+  padding: 20px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-size: 20px;
+  font-weight: 600;
+  color: #ffa533;
+}
+
+.btn-voltar {
+  color: #ffa533;
+  font-size: 14px;
+  text-decoration: none;
+  border: 1px solid #ffa533;
+  padding: 6px 14px;
+  border-radius: 6px;
+  transition: 0.3s ease;
+}
+
+.btn-voltar:hover {
+  background: #ffa533;
+  color: #000;
+}
+
+/* ===== CONTAINER PRINCIPAL ===== */
 .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 15px;
-}
-.main-header {
-    background-color: #ffffff;
-    padding: 15px 0;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-}
-.main-header nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-.main-header .logo {
-    font-size: 24px;
-    font-weight: bold;
-    color: var(--primary-color);
-    text-decoration: none;
-}
-.main-header ul {
-    list-style: none;
-    display: flex;
-    gap: 20px;
-}
-.main-header a {
-    text-decoration: none;
-    color: var(--text-color);
-    padding: 5px 10px;
-    transition: color 0.3s;
-}
-.main-header a:hover, .main-header a.active {
-    color: var(--primary-color);
-    font-weight: bold;
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 20px;
+  text-align: center;
 }
 
-/* Layout Principal */
-.calculator-page {
-    padding: 40px 20px;
-    min-height: 80vh;
+.titulo {
+  font-size: 28px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  background: linear-gradient(90deg, #ffa533, #ffd38a);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
-.calculator-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 30px;
-    max-width: 1100px;
-    margin: 0 auto;
+.subtitulo {
+  font-size: 14px;
+  color: #aaa;
+  margin-bottom: 30px;
 }
 
-/* RF16: Layout de duas colunas em telas maiores */
-@media (min-width: 992px) {
-    .calculator-grid {
-        grid-template-columns: 1fr 1fr; 
-    }
+/* ===== CARDS DE TAXAS ===== */
+.taxas-container {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  margin-bottom: 30px;
 }
 
-/* Estilo do Card (Input e Resultado) */
-.card {
-    background-color: var(--card-background);
-    padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+.card-taxa {
+  background: rgba(255,255,255,0.03);
+  padding: 14px 18px;
+  border-radius: 10px;
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255,255,255,0.06);
+  width: 120px;
+  transition: 0.2s;
 }
 
-.input-section h1 {
-    font-size: 28px;
-    color: var(--text-color); 
-    margin-bottom: 5px;
+.card-taxa:hover {
+  border-color: #ffa533;
 }
 
-.input-section .description {
-    color: var(--secondary-color);
-    margin-bottom: 25px;
+.card-taxa .label {
+  font-size: 12px;
+  color: #aaa;
+  margin-bottom: 4px;
 }
 
-/* Formulário */
-.form-group {
-    margin-bottom: 20px;
+.card-taxa .valor {
+  font-size: 20px;
+  font-weight: bold;
 }
 
-.form-group label {
-    display: block;
-    font-weight: 600;
-    margin-bottom: 8px;
-    color: var(--text-color);
+/* ===== FORM ===== */
+.form-container {
+  background: rgba(255,255,255,0.04);
+  padding: 20px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.08);
+  margin-bottom: 30px;
 }
 
-.form-check {
-    margin-bottom: 10px !important;
+.secao-titulo {
+  font-size: 16px;
+  margin-bottom: 20px;
+  font-weight: 600;
+  color: #ffa533;
 }
 
-.form-group input, 
-.form-group select {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    font-size: 16px;
-    transition: border-color 0.3s;
-    box-sizing: border-box; 
+.form-grupo {
+  text-align: left;
+  margin-bottom: 16px;
 }
 
-.form-group input:focus,
-.form-group select:focus {
-    border-color: var(--primary-color);
-    outline: none;
+.form-grupo label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 14px;
+  color: #ccc;
 }
 
-/* Botões */
-#calculate-btn, .secondary-btn, .primary-btn-alt {
-    width: 100%;
-    padding: 14px;
-    border: none;
-    border-radius: 8px;
-    font-size: 17px;
-    font-weight: 700;
-    cursor: pointer;
-    margin-top: 10px;
-    transition: background-color 0.3s, opacity 0.3s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
+input, select {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.05);
+  color: #fff;
 }
 
-#calculate-btn {
-    background-color: var(--success-color); /* Ajustado para verde conforme protótipo */
-    color: white;
+input:focus, select:focus {
+  outline: none;
+  border-color: #ffa533;
+  background: rgba(255,255,255,0.08);
 }
 
-#calculate-btn:hover:not(:disabled) {
-    background-color: #1e7e34;
+.btn-calcular {
+  background: linear-gradient(90deg, #ffa533, #ff8a05);
+  border: none;
+  padding: 12px 20px;
+  width: 100%;
+  border-radius: 8px;
+  font-weight: 600;
+  color: #000;
+  transition: 0.3s;
+  cursor: pointer;
 }
 
-#calculate-btn:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
+.btn-calcular:hover {
+  filter: brightness(1.1);
 }
 
-.secondary-btn {
-    background-color: #e9ecef;
-    color: var(--secondary-color);
-    font-weight: 500;
+/* ===== RESULTADOS ===== */
+.resultado-container {
+  margin-top: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px;
 }
 
-.secondary-btn:hover {
-    background-color: #dae0e5;
+.card-resultado {
+  background: rgba(255,255,255,0.04);
+  padding: 16px;
+  border-radius: 12px;
+  min-width: 180px;
+  border: 1px solid rgba(255,255,255,0.1);
+  transition: 0.2s;
 }
 
-/* Seção de Resultados */
-.results-section {
-    position: sticky;
-    top: 20px; 
+.card-resultado:hover {
+  border-color: #ffa533;
 }
 
-.results-section h2 {
-    font-size: 24px;
-    border-bottom: 2px solid #eee;
-    padding-bottom: 15px;
-    margin-bottom: 25px;
-    color: var(--text-color);
+.card-resultado .label {
+  font-size: 12px;
+  color: #ccc;
 }
 
-/* Grid para Cartões de Resumo (RF17) */
-.row.row-cols-2 {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 15px;
-}
-.summary-box {
-    border-radius: 8px;
-    padding: 15px 20px;
-    text-align: left;
-    border-left: 5px solid transparent;
-}
-
-/* Estilos Específicos dos Cartões (RF17) */
-.summary-box p {
-    font-size: 16px;
-    color: var(--text-color); 
-    margin-bottom: 5px;
-}
-
-.highlight-value {
-    display: block;
-    font-size: 28px; 
-    font-weight: 800;
-    color: var(--text-color);
-}
-
-/* Cartões Líquidos/Lucro Bruto (Green) */
-.summary-box[style*="#e6ffe6"] {
-    background-color: var(--liquid-bg) !important; 
-    border-left-color: var(--liquid-border) !important;
-}
-
-/* Cartão Custo Total (Red) */
-.summary-box[style*="#ffe6e6"] {
-    background-color: var(--cost-bg) !important; 
-    border-left-color: var(--cost-border) !important;
-}
-
-
-/* Detalhamento (Breakdown) - RF18 */
-.breakdown {
-    margin-top: 30px;
-    padding-top: 20px;
-    border-top: 1px dashed #ccc;
-}
-
-.breakdown h3 {
-    font-size: 18px;
-    margin-bottom: 15px;
-    color: var(--text-color);
-}
-
-.detail-item {
-    display: flex;
-    justify-content: space-between;
-    padding: 10px 0;
-    font-size: 15px;
-    border-bottom: 1px dotted #eee;
-}
-
-.detail-item span:first-child {
-    font-weight: 500;
-}
-
-.detail-item span:last-child {
-    font-weight: 600;
-    color: var(--tax-color); /* Cor para custos */
-}
-
-/* Item de Total no Detalhamento (RF18) */
-.total-item {
-    font-size: 17px;
-    font-weight: 700;
-    margin-top: 15px;
-    padding-top: 15px;
-    border-top: 2px solid #ccc;
-}
-
-.tax-text {
-    color: var(--tax-color) !important;
-}
-
-/* Aviso (Disclaimer) - RF20 */
-.alert-box {
-    background-color: #fff3cd; /* Cor amarela suave */
-    color: #856404; /* Texto escuro */
-    padding: 15px;
-    border: 1px solid #ffeeba;
-    border-radius: 8px;
-    font-size: 14px;
-    margin-top: 20px;
-}
-
-
-/* Exportação e Comparação */
-.export-options {
-    display: flex;
-    gap: 10px;
-    margin-top: 30px;
-    justify-content: center;
-}
-
-.export-options button {
-    flex: none;
-    padding: 12px 20px;
-    font-size: 16px;
-    width: auto;
-}
-
-.primary-btn-alt {
-    background-color: var(--success-color);
-    color: white;
-    border: none;
-}
-
-.primary-btn-alt:hover {
-    background-color: #1e7e34;
-}
-
-/* Utility Class */
-.hidden {
-    display: none;
-}
-
-.main-footer {
-    text-align: center;
-    padding: 20px 0;
-    margin-top: 20px;
-    border-top: 1px solid #eee;
-    background-color: var(--card-background);
-    color: var(--secondary-color);
+.card-resultado .valor {
+  font-size: 18px;
+  font-weight: 600;
+  margin-top: 6px;
+  color: #ffa533;
 }
