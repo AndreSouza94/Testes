@@ -1,0 +1,134 @@
+/* ======================================== */
+/* ESTRUTURA E CONTAINER GERAL */
+/* ======================================== */
+
+.faq-container {
+    max-width: 900px;
+    margin: 60px auto;
+    padding: 0 20px;
+}
+
+.faq-titulo {
+    font-size: 2.5em;
+    color: #333333;
+    text-align: center;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.faq-subtitulo {
+    text-align: center;
+    color: #777777;
+    margin-bottom: 40px;
+}
+
+.faq-category {
+    margin-top: 30px;
+    padding-top: 20px;
+}
+
+.faq-category h2 {
+    font-size: 1.6em;
+    color: #35C453; /* Verde Principal do Projeto */
+    border-bottom: 2px solid #35C453;
+    padding-bottom: 5px;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+/* ======================================== */
+/* ESTILO DO ACORDEÃO (ITEM) */
+/* ======================================== */
+
+.accordion-item {
+    border: 1px solid #DDDDDD;
+    margin-bottom: 10px;
+    border-radius: 6px;
+    overflow: hidden; /* Garante o efeito de deslizar */
+}
+
+.accordion-header {
+    width: 100%;
+    background-color: #F9F9F9;
+    color: #333333;
+    padding: 16px 20px;
+    text-align: left;
+    font-size: 1em;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    outline: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.accordion-header:hover {
+    background-color: #E6F7E9; /* Verde suave no hover */
+    color: #35C453;
+}
+
+/* Estilo para o cabeçalho ATIVO (aberto) */
+.accordion-header.active {
+    background-color: #E6F7E9;
+    color: #35C453;
+    border-bottom: 1px solid #DDDDDD;
+}
+
+
+.accordion-header .icon {
+    font-size: 1.5em;
+    font-weight: 300;
+    line-height: 1;
+    transition: transform 0.3s;
+}
+
+/* Rotação do ícone '+' para fechar quando ativo */
+.accordion-header.active .icon {
+    transform: rotate(45deg); 
+}
+
+/* Container que esconde/mostra a resposta */
+.accordion-content {
+    padding: 0 20px;
+    background-color: #FFFFFF;
+    max-height: 0; 
+    overflow: hidden;
+    transition: max-height 0.3s ease-in-out, padding 0.3s;
+}
+
+.accordion-content p {
+    text-align: left;
+    padding: 15px 0;
+    margin: 0;
+    line-height: 1.6;
+    color: #555555;
+    /* Linha de separação interna do conteúdo (opcional) */
+    border-top: 1px solid #EEEEEE; 
+}
+
+/* ======================================== */
+/* AJUSTE DO CTA NA HOMEPAGE (index.html) */
+/* ======================================== */
+
+.btn-secondary {
+    /* Garante que o CTA do FAQ e Comparação tenham o mesmo estilo secundário */
+    background-color: white;
+    color: #35C453;
+    border: 1px solid #35C453;
+    padding: 10px 20px;
+    border-radius: 4px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.btn-secondary:hover {
+    background-color: #E6F7E9; 
+}
+
+.link-faq {
+    margin-left: 10px;
+    font-size: 1em; /* Ajusta o tamanho do link Dúvidas */
+}
