@@ -9,7 +9,7 @@ body {
   font-family: 'Inter', sans-serif;
   line-height: 1.6;
   color: #f9fafb;
-  background-color: #000;
+  background-color: #FFFFFF;
 }
 
 :root {
@@ -395,4 +395,14 @@ footer {
   .footer-links {
     justify-content: center;
   }
+}
+
+/* Adiciona um espaçamento maior entre as linhas da tabela */
+.table tbody tr {
+  height: 50px;
+}
+
+/* Estilo para o botão de exportar */
+#exportCsv {
+  margin-top: 20px;
 }

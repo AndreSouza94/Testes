@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Histórico de Investimentos</title>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="./CSS/styles.css">
+</head>
+<body>
+
+<div class="container mt-5">
+  <h2>Histórico de Investimentos</h2>
+
+  <!-- Filtros Fixos -->
+  <div class="mb-3">
+    <form>
+      <div class="row">
+        <div class="col-md-3">
+          <label for="tipoInvestimento">Tipo de Investimento</label>
+          <select class="form-control" id="tipoInvestimento">
+            <option value="lca">LCA</option>
+            <option value="cdb">CDB</option>
+            <option value="cdb">LCI</option>
+            <!-- Outros tipos de investimentos -->
+          </select>
+        </div>
+        <div class="col-md-3">
+          <label for="valorInicial">Valor Inicial</label>
+          <input type="number" class="form-control" id="valorInicial" placeholder="Valor Inicial">
+        </div>
+        <div class="col-md-3">
+          <label for="taxaAnual">Taxa Anual (%)</label>
+          <input type="number" class="form-control" id="taxaAnual" placeholder="Taxa Anual">
+        </div>
+        <div class="col-md-3">
+          <label for="tempo">Tempo (Anos)</label>
+          <input type="number" class="form-control" id="tempo" placeholder="Tempo em Anos">
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <!-- Tabela de Investimentos -->
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Tipo de Investimento</th>
+        <th>Valor Inicial</th>
+        <th>Tempo (Anos)</th>
+        <th>Taxa Anual (%)</th>
+        <th>Taxa Custódia (%)</th>
+        <th>Valor Final Bruto</th>
+        <th>Valor Final Líquido</th>
+        <th>Lucro Bruto</th>
+        <th>Custo Total</th>
+        <th>IRRF</th>
+        <th>IOF</th>
+        <th>Taxa de Custódia</th>
+      </tr>
+    </thead>
+    <tbody id="investmentTable">
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+      <!-- Outras linhas de dados podem ser adicionadas aqui -->
+    </tbody>
+  </table>
+
+  <!-- Botão para Exportar CSV -->
+  <button id="exportCsv" class="btn btn-primary">Exportar CSV</button>
+</div>
+
+<script src="./JS/export.js"></script>
+
+</body>
+</html>
