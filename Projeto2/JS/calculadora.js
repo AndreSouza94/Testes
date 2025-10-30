@@ -1,6 +1,3 @@
-// andresouza94/testes/Testes-main/Projeto2/JS/calculadora.js
-
-// (function() { ... }) - Bloco mantido para verificação de login
 (function() {
     const token = localStorage.getItem('token');
     // Verifica se está na página da calculadora e se não há token

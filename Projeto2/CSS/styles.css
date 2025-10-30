@@ -291,19 +291,18 @@ button:hover {
   margin: 20px 0;
   color: var(--muted);
 }
-
+/* ==== Histórico ==== */
 .historico-titulo {
-        font-weight: 600;
-        /* Usando uma cor clara (branco) sobre o fundo claro, ou a cor principal do projeto */
+        font-weight: 600; 
         color: #111827; 
         text-shadow: 1px 1px 2px rgba(0,0,0,0.1); 
     }
 
-    /* CORREÇÃO FINAL PARA ALINHAMENTO DOS BOTÕES */
+    
     .action-button-container {
         display: flex;
         justify-content: center;
-        align-items: center; /* Garante alinhamento vertical perfeito */
+        align-items: center; 
         margin-top: 20px;
         margin-bottom: 50px;
     }
@@ -311,12 +310,11 @@ button:hover {
     #removeSelected, #exportCsv {
         min-width: 200px;
         font-size: 16px;
-        /* Remove qualquer margem vertical ou padding vertical extra */
         margin-top: 0 !important; 
         margin-bottom: 0 !important;
     }
     
-    /* Para manter o espaçamento entre eles: */
+   
     .mx-2 {
         margin-left: 1rem !important;
         margin-right: 1rem !important;
