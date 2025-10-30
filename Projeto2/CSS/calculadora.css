@@ -42,6 +42,21 @@ body {
   color: #000;
 }
 
+.btn-historico {
+  color: #ffa533;
+  font-size: 14px;
+  text-decoration: none;
+  border: 1px solid #ffa533;
+  padding: 6px 14px;
+  border-radius: 6px;
+  transition: 0.3s ease;
+}
+
+.btn-historico:hover {
+  background: #ffa533;
+  color: #000;
+}
+
 /* ===== CONTAINER PRINCIPAL ===== */
 .container {
   width: 100%;
