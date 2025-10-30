@@ -1,3 +1,4 @@
+// andresouza94/testes/Testes-main/Projeto2/JS/historico.js
 
 document.addEventListener('DOMContentLoaded', () => {
     // 1. Check for logged-in user (Requirement: Show only logged user's data)

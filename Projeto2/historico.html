@@ -6,11 +6,28 @@
   <title>Histórico de Simulações</title>
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="./CSS/styles.css">
+
+  <style>
+    /* Estilo para garantir que o título do histórico se destaque */
+    .historico-titulo {
+        font-weight: 600;
+        color: #111827; 
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.1); 
+    }
+    
+    /* REMOÇÃO DA CLASSE CSS ANTIGA 'action-buttons' */
+
+    /* Garante que os botões tenham o mesmo tamanho */
+    #removeSelected, #exportCsv {
+        min-width: 200px; /* Adiciona largura mínima para melhor estética */
+        font-size: 16px;
+    }
+  </style>
 </head>
 <body>
 
 <div class="container mt-5">
-  <h2 class="text-center mb-4">Histórico de Simulações</h2>
+  <h2 class="text-center mb-4 historico-titulo">Histórico de Simulações</h2> 
 
   <div class="table-responsive">
     <table class="table table-dark table-striped">
@@ -21,29 +38,22 @@
           <th>Tipo de Investimento</th>
           <th>Valor Inicial</th>
           <th>Tempo (Anos)</th>
-          <th>Taxa Anual (%)</th>
+          <th>Rentabilidade (%)</th>
           <th>Valor Final Líquido</th>
-          <th>Lucro Bruto</th>
+          <th>Lucro Líquido</th>
         </tr>
       </thead>
       <tbody id="investmentTable">
         <tr>
-          <td><input type="checkbox" class="row-select"></td>
-          <td>2025-10-29 09:20</td>
-          <td>CDB</td>
-          <td>R$ 10.000,00</td>
-          <td>5</td>
-          <td>8.5%</td>
-          <td>R$ 13.900,00</td>
-          <td>R$ 3.900,00</td>
+          <td colspan="8" class="text-center">Carregando histórico...</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <div class="mt-4 mb-5 text-center">
-    <button id="removeSelected" class="btn btn-danger mr-2">Remover Selecionados</button>
-    <button id="exportCsv" class="btn btn-success">Exportar CSV</button>
+  <div class="action-button-container">
+    <button id="removeSelected" class="btn btn-danger mx-2">Remover Selecionados</button>
+    <button id="exportCsv" class="btn btn-success mx-2">Exportar CSV</button>
   </div>
 </div>
 
@@ -51,5 +61,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script src="./JS/export.js"></script>
-<script src="./JS/historico.js"></script> </body>
+<script src="./JS/historico.js"></script>
+
+</body>
 </html>
