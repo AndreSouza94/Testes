@@ -1,0 +1,57 @@
+/* ========================================================= */
+/* ESTILOS ESPECÍFICOS: TERMOS DE USO (./CSS/termos.css) */
+/* Este arquivo COMPLEMENTA o styles.css e utiliza suas variáveis. */
+/* ========================================================= */
+
+.termos-container {
+    /* Define uma largura máxima confortável para leitura */
+    max-width: 800px;
+    margin: 40px auto; /* Centraliza */
+    padding: 20px;
+    /* Aumenta o espaçamento entre linhas para melhor leitura em textos longos */
+    line-height: 1.8; 
+}
+
+.termos-titulo {
+    font-size: 2.2em;
+    font-weight: 700;
+    /* Usa a cor escura principal para alta legibilidade */
+    color: var(--dark-text); 
+    margin-bottom: 5px;
+    text-align: center;
+}
+
+.termos-data {
+    font-size: 0.9em;
+    /* Usa a cor neutra para texto de apoio e data */
+    color: var(--muted-text);
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+.secao {
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    /* Linha de divisão suave (Neutro/Borda) */
+    border-bottom: 1px dashed var(--border-color);
+}
+
+.secao:last-child {
+    border-bottom: none; /* Remove a linha do último item */
+}
+
+.secao h2 {
+    font-size: 1.6em;
+    font-weight: 600;
+    /* Títulos de seção em VERDE PRINCIPAL para destaque e organização */
+    color: var(--primary-color); 
+    margin-bottom: 15px;
+    padding-top: 10px;
+}
+
+.secao p {
+    margin-bottom: 1em; 
+    /* Texto de corpo em cor escura principal para legibilidade (Texto Principal) */
+    color: var(--dark-text);
+    text-align: justify;
+}
