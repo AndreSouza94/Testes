@@ -1,3 +1,6 @@
+// andresouza94/testes/Testes-main/Projeto2/JS/calculadora.js
+
+// (function() { ... }) - Bloco mantido para verificação de login
 (function() {
     const token = localStorage.getItem('token');
     // Verifica se está na página da calculadora e se não há token
@@ -15,7 +18,73 @@ const taxas = {
   ipca: 4.25
 };
 
-// ===== RENDERIZAÇÃO DOS CARDS DE TAXA =====
+// ===== LÓGICA DE HISTÓRICO (Simulação de Backend) =====
+
+/**
+ * Obtém o histórico completo do localStorage.
+ */
+const getHistory = () => {
+    const history = localStorage.getItem('simulacoesHistorico');
+    return history ? JSON.parse(history) : [];
+};
+
+/**
+ * Salva o histórico completo no localStorage.
+ */
+const saveHistory = (history) => {
+    localStorage.setItem('simulacoesHistorico', JSON.stringify(history));
+};
+
+/**
+ * Salva os dados da simulação e vincula ao usuário logado.
+ */
+function saveSimulationToHistory(data) {
+    const userId = localStorage.getItem('idUsuario');
+    if (!userId) {
+        alert("Você precisa estar logado para salvar o histórico.");
+        return false;
+    }
+    
+    const history = getHistory();
+    const newSimulation = {
+        id: Date.now(), // ID único baseado no timestamp
+        idUsuario: parseInt(userId),
+        dataHora: new Date().toLocaleString('pt-BR'), // Data e hora da simulação
+        ...data
+    };
+
+    history.push(newSimulation);
+    saveHistory(history);
+    return true;
+}
+
+// ===== CÁLCULOS FINANCEIROS (IR simplificado) =====
+
+/**
+ * Calcula o Imposto de Renda (IR) com base na tabela regressiva padrão.
+ */
+function calcularIR(lucro, tempoMeses, tipo) {
+    // LCI e LCA são isentos
+    if (tipo === 'lci' || tipo === 'lca') {
+        return 0;
+    }
+
+    let aliquota;
+    if (tempoMeses <= 6) {
+        aliquota = 22.5;
+    } else if (tempoMeses <= 12) {
+        aliquota = 20.0;
+    } else if (tempoMeses <= 24) {
+        aliquota = 17.5;
+    } else {
+        aliquota = 15.0; // Acima de 24 meses
+    }
+
+    return lucro * (aliquota / 100);
+}
+
+
+// ===== RENDERIZAÇÃO DOS CARDS DE TAXA (Lógica mantida) =====
 const taxasContainer = document.getElementById("taxas-container");
 
 function renderTaxas() {
@@ -30,9 +99,10 @@ function renderTaxas() {
   });
 }
 
-renderTaxas();
+document.addEventListener('DOMContentLoaded', renderTaxas);
 
-// ===== LÓGICA DO FORM E CÁLCULO SIMPLES =====
+
+// ===== LÓGICA DO FORM E CÁLCULO COMPLETO (AJUSTADO PARA MESES) =====
 const form = document.getElementById("form-calculadora");
 const resultadoContainer = document.getElementById("resultado-container");
 
@@ -41,34 +111,57 @@ form.addEventListener("submit", (e) => {
 
   const tipo = document.getElementById("tipo").value;
   const valor = parseFloat(document.getElementById("valor").value);
-  const tempo = parseInt(document.getElementById("tempo").value);
+  // MUDANÇA: O input é agora em meses
+  const tempoMeses = parseInt(document.getElementById("tempo").value); 
   const rentabilidade = parseFloat(document.getElementById("rentabilidade").value);
 
-  // Placeholder de cálculo — depois aplicamos IR, IOF, isenção real
-  const cdiHoje = taxas.cdi / 100;
-  const rendimentoBruto = valor * (1 + (cdiHoje * (rentabilidade / 100))) ** (tempo / 12);
-  const lucro = rendimentoBruto - valor;
+  // NOVO: Converte meses para anos para o cálculo de juros compostos (taxa anual)
+  const tempoAnos = tempoMeses / 12;
 
-  // IR provisório — depois aplicamos tabela progressiva conforme meses
-  let ir = 0;
-  if (tipo === "cdb" || tipo === "tesouro") {
-    ir = lucro * 0.15; // 15% fixo como placeholder
-  } else {
-    ir = 0; // LCI/LCA isento
-  }
+  // Cálculo (simplificado: Juros Compostos Anuais)
+  // Taxa Anual = (CDI / 100) * (Rentabilidade / 100)
+  const taxaAnual = (taxas.cdi / 100) * (rentabilidade / 100); 
 
-  const rendimentoLiquido = lucro - ir;
+  // M = Valor * (1 + taxaAnual)^tempoAnos
+  const valorFinalBruto = valor * Math.pow((1 + taxaAnual), tempoAnos);
+  
+  const rendimentoBruto = valorFinalBruto - valor;
 
-  // Render do resultado
+  // Cálculo do IR e IOF: usa tempoMeses para a tabela regressiva
+  const impostoIR = calcularIR(rendimentoBruto, tempoMeses, tipo);
+  const impostoIOF = 0; // Simplificado: assumimos que o resgate é após 30 dias
+  
+  const rendimentoLiquido = rendimentoBruto - impostoIR - impostoIOF;
+  const valorFinalLiquido = valor + rendimentoLiquido;
+  
+  // Objeto de dados para salvar no histórico
+  const simulationData = {
+    tipo: tipo.toUpperCase(),
+    valorInicial: valor,
+    // Salva o tempo em anos com duas casas decimais (para a coluna "Tempo (Anos)")
+    tempoAnos: tempoAnos.toFixed(2), 
+    rentabilidadePercentual: rentabilidade,
+    valorFinal: valorFinalLiquido, // Resultado gerado
+    rendimentoLiquido: rendimentoLiquido, // Resultado gerado (Lucro Líquido)
+    rendimentoBruto: rendimentoBruto, // Resultado gerado
+    impostoIR: impostoIR,
+    impostoIOF: impostoIOF,
+  };
+
+  // Render do resultado e passagem dos dados
   renderResultado([
-    { label: "Rendimento Bruto", valor: `R$ ${lucro.toFixed(2)}` },
-    { label: "Imposto (IR/IOF)", valor: `R$ ${ir.toFixed(2)}` },
-    { label: "Valor Final", valor: `R$ ${rendimentoBruto.toFixed(2)}` },
-    { label: "Rendimento Líquido", valor: `R$ ${rendimentoLiquido.toFixed(2)}` }
-  ]);
+    { label: "Rendimento Bruto", valor: `R$ ${rendimentoBruto.toFixed(2).replace('.', ',')}` },
+    { label: "Imposto (IR)", valor: `R$ ${impostoIR.toFixed(2).replace('.', ',')}` },
+    { label: "Valor Final Líquido", valor: `R$ ${valorFinalLiquido.toFixed(2).replace('.', ',')}` },
+    { label: "Lucro Líquido", valor: `R$ ${rendimentoLiquido.toFixed(2).replace('.', ',')}` }
+  ], simulationData); 
 });
 
-function renderResultado(dados) {
+
+/**
+ * Renderiza os cards de resultado e o botão para adicionar ao histórico.
+ */
+function renderResultado(dados, simulationData = null) {
   resultadoContainer.innerHTML = ""; // limpa antes
 
   dados.forEach((item) => {
@@ -80,6 +173,23 @@ function renderResultado(dados) {
     `;
     resultadoContainer.appendChild(card);
   });
+
+  // Adiciona o botão "Adicionar ao Histórico" (Requisito de Integração)
+  if (simulationData && localStorage.getItem('idUsuario')) {
+      const saveButton = document.createElement("button");
+      saveButton.id = "addToHistory";
+      saveButton.className = "btn btn-primary mt-3";
+      saveButton.textContent = "Adicionar ao Histórico";
+      saveButton.addEventListener("click", () => {
+          if (saveSimulationToHistory(simulationData)) {
+              saveButton.textContent = "Adicionado!";
+              saveButton.classList.remove('btn-primary');
+              saveButton.classList.add('btn-success');
+              saveButton.disabled = true;
+          }
+      });
+      resultadoContainer.appendChild(saveButton);
+  }
 
   // scroll até o resultado com efeito suave
   resultadoContainer.scrollIntoView({ behavior: "smooth" });
