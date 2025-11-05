@@ -1,15 +1,12 @@
-/* frontend/CSS/recuperar-senha.css */
-
-/* === Este arquivo herda a maioria dos estilos do login.css === */
-
-/* ==== AJUSTE DE MARGENS E LAYOUT DO CARD ==== */
 main .card-container {
+    /* Desativa a perspectiva do flip-card, mantendo-o como um card centralizado */
     perspective: none; 
 }
 
 main .form-side {
+    /* Ajusta a altura mínima para acomodar o conteúdo de recuperação/redefinição */
     height: auto; 
-    min-height: 350px;
+    min-height: 400px; /* Acomoda os dois campos de senha da tela de Redefinição */
     position: relative; 
     transform: none; 
 }
@@ -38,7 +35,8 @@ main .form-side {
     color: #6c757d !important; 
 }
 
-#sendRecoveryBtn:disabled {
+#sendRecoveryBtn:disabled,
+#resetPasswordBtn:disabled { /* Aplica o estilo de desabilitado aos dois botões */
     opacity: 0.7;
     cursor: not-allowed;
 }

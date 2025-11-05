@@ -77,7 +77,7 @@ const localLogin = (payload) => {
             message: "Autenticação realizada com sucesso.",
             token: token,
             idUsuario: user.idUsuario,
-            Nome: user.Nome, // ADICIONADO: Retorna o nome do usuário
+            Nome: user.Nome, 
             isAdm: user.isAdm 
         };
     } else {
@@ -109,7 +109,7 @@ document.querySelector(".form-side form").addEventListener("submit", function(e)
     if (data.success) {
         localStorage.setItem("token", data.token);
         localStorage.setItem("idUsuario", data.idUsuario);
-        localStorage.setItem("userName", data.Nome); // SALVA O NOME DO USUÁRIO
+        localStorage.setItem("userName", data.Nome); 
         
         // Redireciona para o index.html, que é sua página principal.
         window.location.href = "index.html"; 
@@ -119,6 +119,7 @@ document.querySelector(".form-side form").addEventListener("submit", function(e)
 });
 
 // --- Função de cadastro (Utilizando simulação local) ---
+// Note que agora selecionamos pelo ID do formulário para evitar conflitos
 document.querySelector(".form-back form").addEventListener("submit", function(e) {
     e.preventDefault();
 
@@ -126,20 +127,27 @@ document.querySelector(".form-back form").addEventListener("submit", function(e)
     const nome = document.getElementById("nome").value.trim();
     const cadEmail = document.getElementById("cadEmail").value.trim();
     const cadSenha = document.getElementById("cadSenha").value.trim();
+    const confirmaSenha = document.getElementById("confirmaSenha").value.trim(); // NOVO CAMPO
 
-    if (!nome || !cadEmail || !cadSenha) {
+    if (!nome || !cadEmail || !cadSenha || !confirmaSenha) {
         alert("Todos os campos são obrigatórios.");
         return;
     }
 
-    // Validação do e-mail
+    // 1. VALIDAÇÃO DE CONFIRMAÇÃO DE SENHA (Novo requisito)
+    if (cadSenha !== confirmaSenha) {
+        alert("As senhas digitadas não coincidem.");
+        return;
+    }
+
+    // 2. Validação do e-mail
     const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
     if (!emailRegex.test(cadEmail)) {
         alert("Email inválido. Por favor, insira um email válido.");
         return;
     }
 
-    // Validação da senha
+    // 3. Validação da senha
     if (cadSenha.length < 6) {
         alert("A senha deve ter pelo menos 6 caracteres.");
         return;
@@ -148,6 +156,7 @@ document.querySelector(".form-back form").addEventListener("submit", function(e)
     const payload = {
         Nome: nome,
         Email: cadEmail,
+        // Envia apenas a senha principal para o registro
         Senha: cadSenha
     };
 
