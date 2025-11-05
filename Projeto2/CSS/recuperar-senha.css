@@ -1,0 +1,44 @@
+/* frontend/CSS/recuperar-senha.css */
+
+/* === Este arquivo herda a maioria dos estilos do login.css === */
+
+/* ==== AJUSTE DE MARGENS E LAYOUT DO CARD ==== */
+main .card-container {
+    perspective: none; 
+}
+
+main .form-side {
+    height: auto; 
+    min-height: 350px;
+    position: relative; 
+    transform: none; 
+}
+
+/* Estilo para a mensagem de status (Sucesso/Erro) */
+#statusMessage {
+    font-size: 14px;
+    padding: 10px;
+    border-radius: 6px;
+    font-weight: 500;
+}
+
+.success-message {
+    color: #155724; /* Verde escuro */
+    background-color: #d4edda; /* Fundo verde claro */
+    border: 1px solid #c3e6cb;
+}
+
+.error-message {
+    color: #721c24; /* Vermelho escuro */
+    background-color: #f8d7da; /* Fundo vermelho claro */
+    border: 1px solid #f5c6cb;
+}
+
+.text-muted {
+    color: #6c757d !important; 
+}
+
+#sendRecoveryBtn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
