@@ -28,6 +28,19 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
+// Helper functions for formatting (ADICIONADAS)
+const formatCurrency = (value) => {
+    const numberValue = parseFloat(value);
+    if (isNaN(numberValue)) return 'R$ 0,00';
+    return numberValue.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+};
+
+const formatPercent = (value) => {
+    const numberValue = parseFloat(value);
+    if (isNaN(numberValue)) return '0,00%';
+    return numberValue.toFixed(2).replace('.', ',') + '%';
+};
+
 // Helper functions for localStorage
 const getHistory = () => {
     const history = localStorage.getItem('simulacoesHistorico');
@@ -52,15 +65,17 @@ function loadHistory() {
 }
 
 /**
- * Renderiza a tabela com as simulações.
+ * Renderiza a tabela com as simulações, incluindo todas as colunas detalhadas.
  */
 function renderTable(simulations) {
     const tableBody = document.getElementById('investmentTable');
     tableBody.innerHTML = ''; // Limpa as linhas existentes
     
+    const COLUMNS_COUNT = 11; // 1 (Checkbox) + 10 colunas de dados
+    
     if (simulations.length === 0) {
         const row = tableBody.insertRow();
-        row.innerHTML = `<td colspan="8" class="text-center">Nenhuma simulação encontrada. Adicione uma na Calculadora!</td>`;
+        row.innerHTML = `<td colspan="${COLUMNS_COUNT}" class="text-center">Nenhuma simulação encontrada. Adicione uma na Calculadora!</td>`;
         return;
     }
 
@@ -68,17 +83,40 @@ function renderTable(simulations) {
         const row = tableBody.insertRow();
         // Armazena o ID da simulação na linha para fácil acesso
         row.setAttribute('data-id', sim.id);
-
+        
+        // Garante que todos os campos existam para evitar erros de renderização
+        const valorInicial = sim.valorInicial || 0;
+        const valorFinalLiquido = sim.valorFinalLiquido || 0;
+        const rendimentoBruto = sim.rendimentoBruto || 0;
+        const impostosTotais = sim.impostosTotais || 0;
+        const lucroLiquido = sim.lucroLiquido || (valorFinalLiquido - valorInicial);
+        const percentual = sim.percentual || 0;
+        
         row.innerHTML = `
             <td><input type="checkbox" class="row-select" data-id="${sim.id}"></td>
-            <td>${sim.dataHora}</td>
-            <td>${sim.tipo}</td>
-            <td>R$ ${sim.valorInicial.toFixed(2).replace('.', ',')}</td>
-            <td>${sim.tempoAnos}</td>
-            <td>${sim.rentabilidadePercentual}%</td>
-            <td>R$ ${sim.valorFinal.toFixed(2).replace('.', ',')}</td>
-            <td>R$ ${sim.rendimentoLiquido.toFixed(2).replace('.', ',')}</td>
+            <td class="text-left">${sim.dataHora}</td>
+            <td class="text-center">${sim.tipo || 'N/A'}</td>
+            <td class="text-right">${formatCurrency(valorInicial)}</td>
+            <td class="text-center">${sim.tempoDias || 'N/A'}</td>
+            <td class="text-center">${formatPercent(sim.rentabilidadePercentual || 0)}</td>
+            <td class="text-right">${formatCurrency(rendimentoBruto)}</td>
+            <td class="text-right">${formatCurrency(impostosTotais)}</td>
+            <td class="text-right">${formatCurrency(valorFinalLiquido)}</td>
+            <td class="text-right">${formatCurrency(lucroLiquido)}</td>
+            <td class="text-center">${formatPercent(percentual)}</td>
         `;
+        
+        // Aplica cores de lucro/prejuízo
+        const lucroCell = row.cells[9];
+        const percentualCell = row.cells[10];
+
+        if (lucroLiquido < 0) {
+            lucroCell.classList.add('error-text');
+            percentualCell.classList.add('error-text');
+        } else if (lucroLiquido > 0) {
+            lucroCell.classList.add('success-text');
+            percentualCell.classList.add('success-text');
+        }
     });
     
     updateSelectAllState();

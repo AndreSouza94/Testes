@@ -16,10 +16,10 @@ const taxas = {
   poupança: 8.37 // Adicionado conforme sua solicitação
 };
 
-// Variável global para armazenar o último resultado líquido (para exportação, se necessário)
-let lastSimulationData = null; 
+// Variável global para armazenar o payload completo para salvar no histórico
+let lastHistoryData = null; 
 
-// ===== LÓGICA DE HISTÓRICO E UTILITÁRIOS (Sem alterações) =====
+// ===== LÓGICA DE HISTÓRICO E UTILITÁRIOS (Sem alterações substanciais no corpo da função) =====
 
 /**
  * Funções auxiliares para localStorage (mantido do código original)
@@ -126,7 +126,10 @@ function calcularIR(lucro, tempoDias, tipo) {
  * OBS: Esta é uma simulação de Frontend. O cálculo REAL deve ser feito no Backend.
  */
 function runSimulation(valorInicial, taxaAnual, dataInicial, dataFinal, aporteMensal, tipo) {
-    const taxaMensalDecimal = Math.pow(1 + (taxaAnual / 100), 1/12) - 1;
+    // Calcula a taxa mensal equivalente
+    const taxaAnualDecimal = taxaAnual / 100;
+    const taxaMensalDecimal = Math.pow(1 + taxaAnualDecimal, 1/12) - 1;
+    
     const tempoMesesTotal = calculateMonths(dataInicial, dataFinal);
     const tempoDiasTotal = calculateDays(dataInicial, dataFinal);
     
@@ -140,7 +143,7 @@ function runSimulation(valorInicial, taxaAnual, dataInicial, dataFinal, aporteMe
         valorAcumulado *= (1 + taxaMensalDecimal);
         
         // Aplica o aporte mensal
-        if (m > 0 && aporteMensal > 0) { // Aporte só é aplicado se for > 0
+        if (m > 0 && aporteMensal > 0) { // Aporte só é aplicado a partir do 2º mês
             valorAcumulado += aporteMensal;
             totalAportado += aporteMensal;
         }
@@ -152,7 +155,7 @@ function runSimulation(valorInicial, taxaAnual, dataInicial, dataFinal, aporteMe
     // Cálculo dos Impostos (usando o tempo em dias)
     const impostoIR = calcularIR(rendimentoBruto, tempoDiasTotal, tipo);
     const impostoIOF = tempoDiasTotal < 30 ? (rendimentoBruto * 0.1) : 0; // IOF Simples Mock
-    const taxas = 0; // Taxas administrativas (simplificação)
+    const taxas = (tipo === 'tesouro' && tempoDiasTotal > 0) ? (valorFinalBruto * 0.002) : 0; // Taxa de custódia Tesouro 0.2% a.a (simplificação)
     
     const valorFinalLiquido = valorFinalBruto - impostoIR - impostoIOF - taxas;
     const lucroLiquido = valorFinalLiquido - totalAportado;
@@ -169,7 +172,8 @@ function runSimulation(valorInicial, taxaAnual, dataInicial, dataFinal, aporteMe
         taxas: taxas,
         lucroLiquido: lucroLiquido,
         percentual: percentual,
-        tempoDiasTotal: tempoDiasTotal
+        tempoDiasTotal: tempoDiasTotal,
+        totalAportado: totalAportado // Adicionado para rastrear o capital total
     };
 }
 
@@ -181,7 +185,8 @@ const inputRentabilidade = document.getElementById("rentabilidade");
 const inputAporteMensal = document.getElementById("aporte-mensal");
 const checkAporte = document.getElementById("check-aporte");
 const grupoAporte = document.getElementById("grupo-aporte");
-const taxasContainer = document.getElementById("taxas-container"); // Mantido para renderização
+const taxasContainer = document.getElementById("taxas-container");
+const addHistoryBtn = document.getElementById("addHistoryBtn"); 
 
 
 // Lógica para habilitar/desabilitar o campo de Aporte (Sem alteração)
@@ -208,6 +213,10 @@ inputAporteMensal.addEventListener('blur', (e) => {
 
 form.addEventListener("submit", (e) => {
     e.preventDefault();
+    
+    // Limpa o estado anterior
+    lastHistoryData = null;
+    addHistoryBtn.classList.add('hidden'); 
 
     // 1. Limpeza e Coleta de Dados
     const tipo = document.getElementById("tipo").value;
@@ -224,40 +233,65 @@ form.addEventListener("submit", (e) => {
     }
     
     // 2. Validação Adicional de Datas
-    if (new Date(dataInicial) > new Date(dataFinal)) {
-        alert("A Data Final não pode ser anterior à Data Inicial.");
+    if (new Date(dataInicial) >= new Date(dataFinal)) {
+        alert("A Data Final deve ser posterior à Data Inicial.");
         return;
     }
     
     // 3. Executa a Simulação
     const resultados = runSimulation(valor, rentabilidade, dataInicial, dataFinal, aporteMensal, tipo);
-    lastSimulationData = resultados;
     
     // 4. Renderiza o Resultado
     renderResultado(resultados);
     
     // 5. Prepara dados para salvar no histórico
-    const dadosParaHistorico = {
+    const impostosTotais = resultados.impostoIR + resultados.impostoIOF + resultados.taxas;
+    
+    lastHistoryData = {
         tipo: tipo.toUpperCase(),
         valorInicial: valor,
-        dataInicial: dataInicial,
-        dataFinal: dataFinal,
         rentabilidadePercentual: rentabilidade,
-        aporteMensal: aporteMensal,
+        tempoDias: resultados.tempoDiasTotal,
         
-        // Campos de resultado solicitados no Item 4
-        valorFinal: resultados.valorFinalLiquido, 
-        lucroLiquido: resultados.lucroLiquido,
-        rendimentoBruto: resultados.rendimentoBruto,
-        impostoIR: resultados.impostoIR,
-        percentual: resultados.percentual,
-        tempoDias: resultados.tempoDiasTotal
+        // Campos de resultado estendidos
+        valorFinalBruto: resultados.valorFinalBruto, 
+        valorFinalLiquido: resultados.valorFinalLiquido, 
+        rendimentoBruto: resultados.rendimentoBruto, 
+        impostosTotais: impostosTotais, // Consolida IR, IOF e Taxas
+        lucroLiquido: resultados.lucroLiquido, 
+        percentual: resultados.percentual, 
     };
 
-    if(saveSimulationToHistory(dadosParaHistorico)) {
-        alert(`Simulação de ${resultados.tempoDiasTotal} dias salva no Histórico!`);
-    }
+    // 6. Exibe o botão de salvar (salvamento desativado - agora é manual)
+    addHistoryBtn.classList.remove('hidden');
 });
+
+// Event Listener para o botão "Adicionar ao Histórico" (Salvamento Manual)
+if (addHistoryBtn) {
+    addHistoryBtn.addEventListener('click', () => {
+        if (lastHistoryData) {
+            // Cria um payload para o histórico com as colunas necessárias
+            const dataToSave = {
+                tipo: lastHistoryData.tipo,
+                valorInicial: lastHistoryData.valorInicial,
+                rentabilidadePercentual: lastHistoryData.rentabilidadePercentual,
+                tempoDias: lastHistoryData.tempoDias,
+                valorFinalLiquido: lastHistoryData.valorFinalLiquido,
+                rendimentoBruto: lastHistoryData.rendimentoBruto,
+                impostosTotais: lastHistoryData.impostosTotais,
+                lucroLiquido: lastHistoryData.lucroLiquido,
+                percentual: lastHistoryData.percentual,
+            };
+            
+            if (saveSimulationToHistory(dataToSave)) {
+                alert(`Simulação de ${lastHistoryData.tempoDias} dias salva no Histórico com sucesso!`);
+                addHistoryBtn.classList.add('hidden'); // Oculta o botão após salvar
+            }
+        } else {
+            alert("Nenhum resultado de simulação para salvar. Calcule primeiro.");
+        }
+    });
+}
 
 
 /**
@@ -267,13 +301,17 @@ function renderResultado(r) {
     const formatCurrency = (value) => value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
     const formatPercent = (value) => value.toFixed(2).replace('.', ',') + '%';
     
+    const impostosTotais = r.impostoIR + r.impostoIOF + r.taxas;
+    
     document.getElementById("res-bruto").textContent = formatCurrency(r.valorFinalBruto);
     document.getElementById("res-rendimento-bruto").textContent = formatCurrency(r.rendimentoBruto);
-    document.getElementById("res-imposto").textContent = formatCurrency(r.impostoIR + r.impostoIOF + r.taxas);
+    document.getElementById("res-imposto").textContent = formatCurrency(impostosTotais);
     document.getElementById("res-liquido").textContent = formatCurrency(r.valorFinalLiquido);
     document.getElementById("res-lucro-liquido").textContent = formatCurrency(r.lucroLiquido);
     document.getElementById("res-percentual").textContent = formatPercent(r.percentual);
     
+    // Exibe o container de resultados
+    resultadoContainer.classList.remove('hidden');
     // scroll até o resultado com efeito suave
     resultadoContainer.scrollIntoView({ behavior: "smooth" });
 }
@@ -281,6 +319,7 @@ function renderResultado(r) {
 // ===== RENDERIZAÇÃO DOS CARDS DE TAXA (CORRIGIDO) =====
 
 function renderTaxas() {
+  const taxasContainer = document.getElementById("taxas-container");
   taxasContainer.innerHTML = ''; // Limpa antes de renderizar
   Object.entries(taxas).forEach(([chave, valor]) => {
     const card = document.createElement("div");

@@ -179,6 +179,26 @@ select {
     background-size: 12px;
 }
 
+/* NOVO: Estilo para as opções dentro do SELECT */
+select option {
+    color: #fff; 
+    background: #222; 
+    padding: 8px;
+}
+
+/* NOVO: Melhora o contraste da opção selecionada */
+select option:checked { 
+    background-color: #ffa533;
+    color: #000; 
+}
+
+/* NOVO: Melhora o estilo de hover no dropdown */
+select option:hover {
+    background-color: #ff8a05;
+    color: #000;
+}
+
+
 /* Estiliza o placeholder para melhor visibilidade */
 input::placeholder {
     color: #888;

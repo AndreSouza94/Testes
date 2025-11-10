@@ -436,3 +436,45 @@ footer {
 #exportCsv {
   margin-top: 20px;
 }
+
+/* NOVOS ESTILOS PARA O LAYOUT DO HISTÓRICO */
+
+/* Classes de alinhamento para a tabela de histórico */
+.text-left {
+    text-align: left !important;
+}
+
+.text-center {
+    text-align: center !important;
+}
+
+.text-right {
+    text-align: right !important;
+}
+
+/* Cor de sucesso e erro na tabela */
+.success-text {
+    color: #28a745 !important; /* Cor verde para lucro */
+    font-weight: 600;
+}
+.error-text {
+    color: #dc3545 !important; /* Cor vermelha para prejuízo */
+    font-weight: 600;
+}
+
+/* Ajustes visuais da tabela */
+.table.table-dark th {
+    color: #ffd38a; /* Cor de destaque para o header */
+    font-weight: 600;
+    font-size: 0.85rem;
+    vertical-align: middle;
+}
+
+.table.table-dark td {
+    vertical-align: middle;
+    font-size: 0.9rem;
+}
+/* Sobrescreve o alinhamento padrão da primeira coluna de dados (Data/Hora) */
+.table.table-dark tbody td:nth-child(2) {
+    text-align: left;
+}

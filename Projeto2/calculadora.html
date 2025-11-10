@@ -7,30 +7,23 @@
   <link rel="stylesheet" href="./CSS/calculadora.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script> <!-- Adicionado Axios -->
-</head>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script> </head>
 <body>
 
-  <!-- HEADER -->
   <header class="header">
     <div class="logo">💰 InvestCalc</div>
     <a href="historico.html" target="_blank" class="btn-historico">Histórico →</a>
     <a href="index.html" class="btn-voltar">← Voltar</a>
   </header>
 
-  <!-- CONTAINER PRINCIPAL -->
   <main class="container">
     
-    <!-- TÍTULO -->
     <h1 class="titulo">Simulador de Investimentos</h1>
     <p class="subtitulo">Compare rendimentos com base na taxa SELIC / CDI / IPCA</p>
 
-    <!-- CARDS DE TAXAS (render via JS ou mock) -->
     <section class="taxas-container" id="taxas-container">
-      <!-- Cards de taxa serão inseridos via JS -->
-    </section>
+      </section>
 
-    <!-- FORMULÁRIO -->
     <section class="form-container">
       <h2 class="secao-titulo">Preencha os dados para simular</h2>
 
@@ -49,7 +42,6 @@
           <input type="number" id="valor" placeholder="Ex: 1000" min="0.01" step="0.01" required />
         </div>
 
-        <!-- Data Inicial e Final (Layout de 2 Colunas) -->
         <div class="form-grupo-datas">
             <div class="form-grupo">
                 <label>Data Inicial (DT.Inicial)</label>
@@ -61,14 +53,11 @@
             </div>
         </div>
         
-        <!-- NOVO: Checkbox para Aporte -->
         <div class="form-grupo checkbox-grupo">
             <input type="checkbox" id="check-aporte">
             <label for="check-aporte" class="checkbox-label">Incluir Aporte para Reinvestimento Mensal?</label>
         </div>
 
-        <!-- NOVO: Aporte Mensal (Iniciamente desabilitado) -->
-        <!-- O JS controlará a visibilidade e o valor -->
         <div class="form-grupo hidden" id="grupo-aporte"> 
           <label>Aporte para Reinvestimento Mensal (R$)</label>
           <input type="text" id="aporte-mensal" placeholder="Valor do aporte" value="0,00" disabled />
@@ -81,11 +70,14 @@
 
         <button type="submit" class="btn-calcular">Calcular</button>
       </form>
+      
+      <button id="addHistoryBtn" class="btn-calcular hidden" style="margin-top: 15px;">
+        Adicionar ao Histórico
+      </button>
+      
     </section>
 
-    <!-- RESULTADOS -->
-    <section class="resultado-container" id="resultado-container">
-        <!-- O painel de resultados detalhado -->
+    <section class="resultado-container hidden" id="resultado-container">
         <h2 class="secao-titulo">Resultados</h2>
         <div class="cards-resultado-detalhe">
             <div class="card-resultado"><div class="label">Valor Final Bruto</div><div class="valor" id="res-bruto">R$ 0,00</div></div>
