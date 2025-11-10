@@ -5,22 +5,21 @@
         alert('Você precisa estar logado para acessar a calculadora. Redirecionando para a tela de Login.');
         window.location.href = 'login.html'; 
     }
-    // Renderiza as taxas (mantido do código original)
-    renderTaxas();
+    // A chamada renderTaxas() foi movida para o evento DOMContentLoaded, mais abaixo.
 })();
 
-// ===== MOCK DE TAXAS (mantido do código original) =====
+// ===== MOCK DE TAXAS (CORRIGIDO E ATUALIZADO) =====
 const taxas = {
-  selic: 15,
-  cdi: 14.9,
+  selic: 15.00,
+  cdi: 14.90,
   ipca: 5.17,
-  Poupança: 8.37
+  poupança: 8.37 // Adicionado conforme sua solicitação
 };
 
 // Variável global para armazenar o último resultado líquido (para exportação, se necessário)
 let lastSimulationData = null; 
 
-// ===== LÓGICA DE HISTÓRICO E UTILITÁRIOS =====
+// ===== LÓGICA DE HISTÓRICO E UTILITÁRIOS (Sem alterações) =====
 
 /**
  * Funções auxiliares para localStorage (mantido do código original)
@@ -96,7 +95,7 @@ function calculateMonths(dateInitial, dateFinal) {
 }
 
 
-// ===== CÁLCULOS FINANCEIROS (MOCK SIMPLIFICADO) =====
+// ===== CÁLCULOS FINANCEIROS (MOCK SIMPLIFICADO - Sem alterações) =====
 
 /**
  * Simula o cálculo de IR (tabela regressiva)
@@ -141,7 +140,7 @@ function runSimulation(valorInicial, taxaAnual, dataInicial, dataFinal, aporteMe
         valorAcumulado *= (1 + taxaMensalDecimal);
         
         // Aplica o aporte mensal
-        if (m > 0) { // Aporte começa no 1º mês completo
+        if (m > 0 && aporteMensal > 0) { // Aporte só é aplicado se for > 0
             valorAcumulado += aporteMensal;
             totalAportado += aporteMensal;
         }
@@ -180,9 +179,28 @@ const form = document.getElementById("form-calculadora");
 const resultadoContainer = document.getElementById("resultado-container");
 const inputRentabilidade = document.getElementById("rentabilidade");
 const inputAporteMensal = document.getElementById("aporte-mensal");
+const checkAporte = document.getElementById("check-aporte");
+const grupoAporte = document.getElementById("grupo-aporte");
+const taxasContainer = document.getElementById("taxas-container"); // Mantido para renderização
 
 
-// Adicionado para formatar input de aporte para moeda BR
+// Lógica para habilitar/desabilitar o campo de Aporte (Sem alteração)
+checkAporte.addEventListener('change', () => {
+    if (checkAporte.checked) {
+        grupoAporte.classList.remove('hidden');
+        inputAporteMensal.disabled = false;
+        // Foca no campo quando habilitado
+        inputAporteMensal.focus(); 
+    } else {
+        grupoAporte.classList.add('hidden');
+        inputAporteMensal.disabled = true;
+        // Zera o valor do input quando desabilitado, garantindo 0,00 no cálculo
+        inputAporteMensal.value = '0,00'; 
+    }
+});
+
+
+// Adicionado para formatar input de aporte para moeda BR (Sem alteração)
 inputAporteMensal.addEventListener('blur', (e) => {
     e.target.value = cleanCurrency(e.target.value).toLocaleString('pt-BR', { minimumFractionDigits: 2 });
 });
@@ -196,11 +214,14 @@ form.addEventListener("submit", (e) => {
     const valor = cleanCurrency(document.getElementById("valor").value);
     const dataInicial = document.getElementById("data-inicial").value;
     const dataFinal = document.getElementById("data-final").value;
-    const aporteMensal = cleanCurrency(document.getElementById("aporte-mensal").value);
-    
-    // Lida com ponto ou vírgula na rentabilidade
     const rentabilidadeStr = inputRentabilidade.value.trim();
     const rentabilidade = cleanCurrency(rentabilidadeStr);
+    
+    // NOVO: Coleta o aporte, mas zera se o checkbox não estiver marcado
+    let aporteMensal = 0;
+    if (checkAporte.checked) {
+        aporteMensal = cleanCurrency(inputAporteMensal.value);
+    }
     
     // 2. Validação Adicional de Datas
     if (new Date(dataInicial) > new Date(dataFinal)) {
@@ -257,17 +278,28 @@ function renderResultado(r) {
     resultadoContainer.scrollIntoView({ behavior: "smooth" });
 }
 
-// ===== RENDERIZAÇÃO DOS CARDS DE TAXA (Lógica mantida) =====
-const taxasContainer = document.getElementById("taxas-container");
+// ===== RENDERIZAÇÃO DOS CARDS DE TAXA (CORRIGIDO) =====
 
 function renderTaxas() {
+  taxasContainer.innerHTML = ''; // Limpa antes de renderizar
   Object.entries(taxas).forEach(([chave, valor]) => {
     const card = document.createElement("div");
     card.classList.add("card-taxa");
+    // Formata o valor para 2 casas decimais, usando vírgula
+    const valorFormatado = valor.toFixed(2).replace('.', ',');
     card.innerHTML = `
       <div class="label">${chave.toUpperCase()}</div>
-      <div class="valor">${valor}%</div>
+      <div class="valor">${valorFormatado}%</div>
     `;
     taxasContainer.appendChild(card);
   });
 }
+
+// ** CHAVE DE CORREÇÃO **: Executa a renderização das taxas quando o DOM estiver pronto
+document.addEventListener('DOMContentLoaded', () => {
+    // A variável taxasContainer (que depende do DOM) é inicializada aqui
+    const taxasContainer = document.getElementById("taxas-container");
+    if (taxasContainer) {
+        renderTaxas();
+    }
+});

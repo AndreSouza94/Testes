@@ -166,6 +166,17 @@ input, select {
   border: 1px solid rgba(255,255,255,0.1);
   background: rgba(255,255,255,0.05);
   color: #fff;
+  /* Garante alinhamento consistente para o select */
+  -webkit-appearance: none; 
+  -moz-appearance: none; 
+  appearance: none; 
+}
+/* Estilo para setinha do select */
+select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%23ccc' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 12px;
 }
 
 /* Estiliza o placeholder para melhor visibilidade */
@@ -178,6 +189,43 @@ input:focus, select:focus {
   border-color: #ffa533;
   background: rgba(255,255,255,0.08);
 }
+
+/* Estilo para o campo desabilitado */
+#grupo-aporte input:disabled {
+    cursor: not-allowed;
+    background-color: rgba(255,255,255,0.02);
+    border-color: rgba(255,255,255,0.05);
+    color: #888;
+}
+
+/* Estilos para o Checkbox NOVO */
+.checkbox-grupo {
+    display: flex;
+    align-items: center;
+    margin-bottom: 25px;
+    padding-top: 5px;
+}
+
+.checkbox-grupo input[type="checkbox"] {
+    width: auto;
+    height: 16px;
+    margin-right: 10px;
+    cursor: pointer;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.2);
+}
+.checkbox-label {
+    margin-bottom: 0 !important;
+    font-size: 15px !important;
+    color: #ddd !important;
+    cursor: pointer;
+}
+
+/* Classe utilitária para esconder elementos */
+.hidden {
+    display: none !important;
+}
+
 
 .btn-calcular {
   background: linear-gradient(90deg, #ffa533, #ff8a05);
@@ -198,7 +246,6 @@ input:focus, select:focus {
 /* ===== RESULTADOS (Ajustado para 3 colunas em telas maiores) ===== */
 .resultado-container {
   margin-top: 20px;
-  /* display: flex; REMOVIDO para usar grid */
 }
 
 .cards-resultado-detalhe {
