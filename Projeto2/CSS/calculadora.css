@@ -512,36 +512,47 @@ input:focus, select:focus {
 
 
 /* Estilos para o Checkbox NOVO */
-
 .checkbox-grupo {
 
     display: flex;
-
     align-items: center;
-
     margin-bottom: 25px;
-
     padding-top: 5px;
-
 }
-
-
 
 .checkbox-grupo input[type="checkbox"] {
 
-    width: auto;
-
-    height: 16px;
-
+    width: 18px;
+    height: 18px;
     margin-right: 10px;
-
     cursor: pointer;
-
     background: rgba(255,255,255,0.05);
-
     border: 1px solid rgba(255,255,255,0.2);
-
+    transition: 0.3s ease;
 }
+
+/* Estilo para o checkbox marcado */
+.checkbox-grupo input[type="checkbox"]:checked {
+
+    background-color: #ffa533; /* Cor de fundo quando o checkbox estiver marcado */
+    border-color: #ffa533;    /* Cor da borda quando marcado */
+}
+
+/* Estilo para o texto ao lado do checkbox */
+.checkbox-label {
+
+    margin-bottom: 0 !important;
+    font-size: 15px !important;
+    color: #ddd !important;
+    cursor: pointer;
+}
+
+/* Estilo do checkbox quando está selecionado e o usuário passa o mouse sobre ele */
+.checkbox-grupo input[type="checkbox"]:hover {
+
+    border-color: #ffa533; /* Cor da borda ao passar o mouse */
+}
+
 
 .checkbox-label {
 
