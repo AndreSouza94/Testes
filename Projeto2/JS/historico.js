@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-// Helper functions for formatting (ADICIONADAS)
+// Helper functions for formatting
 
 // Ajustada para garantir que valores monetários sejam formatados corretamente.
 const formatCurrency = (value) => {

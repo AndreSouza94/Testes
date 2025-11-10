@@ -264,14 +264,6 @@ body {
 
 
 
-
-
-/* Colunas (ajustado para aceitar Formulário e Resultados) */
-
-
-
-
-
 .form-column {
 
   order: 1;
@@ -289,10 +281,7 @@ body {
 
 
 
-
-
-
-/* ===== FORM (Ajustado) ===== */
+/* ===== FORM  ===== */
 
 .form-container {
 
@@ -708,7 +697,7 @@ input:focus, select:focus {
 
 
 
-/* ===== GRÁFICO (CHART-SECTION) - LARGURA TOTAL ===== */
+/* ===== GRÁFICO (CHART-SECTION) ===== */
 
 .chart-section {
 

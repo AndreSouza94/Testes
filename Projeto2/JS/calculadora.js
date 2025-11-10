@@ -1,17 +1,16 @@
-// Verifica se o usuário está logado (mantido do código original)
 (function() {
     const token = localStorage.getItem('token');
     if (window.location.pathname.includes('calculadora.html') && !token) { 
         alert('Você precisa estar logado para acessar a calculadora. Redirecionando para a tela de Login.');
         window.location.href = 'login.html'; 
     }
-    // A chamada renderTaxas() foi movida para o evento DOMContentLoaded, mais abaixo.
+    
 })();
 
 // Variável global para armazenar a instância do gráfico
 let chartInstance = null;
 
-// ===== MOCK DE TAXAS (MANTIDO) =====
+// ===== MOCK DE TAXAS  =====
 const taxas = {
   selic: 15.00,
   cdi: 14.90,
@@ -22,11 +21,9 @@ const taxas = {
 // Variável global para armazenar o payload completo para salvar no histórico
 let lastHistoryData = null; 
 
-// ===== LÓGICA DE HISTÓRICO E UTILITÁRIOS (MANTIDO) =====
+// ===== LÓGICA DE HISTÓRICO E UTILITÁRIOS =====
 
-/**
- * Funções auxiliares para localStorage (mantido do código original)
- */
+
 const getHistory = () => {
     const history = localStorage.getItem('simulacoesHistorico');
     return history ? JSON.parse(history) : [];
@@ -264,7 +261,7 @@ const taxasContainer = document.getElementById("taxas-container");
 const addHistoryBtn = document.getElementById("addHistoryBtn"); 
 
 
-// Lógica para habilitar/desabilitar o campo de Aporte (Mantido)
+
 checkAporte.addEventListener('change', () => {
     if (checkAporte.checked) {
         grupoAporte.classList.remove('hidden');
@@ -278,7 +275,7 @@ checkAporte.addEventListener('change', () => {
 });
 
 
-// Adicionado para formatar input de aporte para moeda BR (Mantido)
+
 inputAporteMensal.addEventListener('blur', (e) => {
     e.target.value = cleanCurrency(e.target.value).toLocaleString('pt-BR', { minimumFractionDigits: 2 });
 });
@@ -291,7 +288,7 @@ form.addEventListener("submit", (e) => {
     addHistoryBtn.classList.add('hidden'); 
     chartSection.classList.add('hidden'); // Oculta o gráfico antes do cálculo
 
-    // 1. Coleta de Dados (Mantido)
+ 
     const tipo = document.getElementById("tipo").value;
     const valor = cleanCurrency(document.getElementById("valor").value);
     const dataInicial = document.getElementById("data-inicial").value;
@@ -304,7 +301,7 @@ form.addEventListener("submit", (e) => {
         aporteMensal = cleanCurrency(inputAporteMensal.value);
     }
     
-    // 2. Validação (Mantido)
+    // 2. Validação 
     if (new Date(dataInicial) >= new Date(dataFinal)) {
         alert("A Data Final deve ser posterior à Data Inicial.");
         return;
@@ -316,10 +313,10 @@ form.addEventListener("submit", (e) => {
     // 4. Renderiza o Resultado
     renderResultado(resultados);
     
-    // 5. Renderiza o Gráfico (NOVO)
+    // 5. Renderiza o Gráfico 
     renderChart(resultados.monthlySeries);
     
-    // 6. Prepara dados para salvar no histórico (Mantido)
+    // 6. Prepara dados para salvar no histórico 
     lastHistoryData = {
         tipo: tipo.toUpperCase(), 
         valorInicial: valor,
@@ -335,11 +332,11 @@ form.addEventListener("submit", (e) => {
         percentual: resultados.percentual, 
     };
 
-    // 7. Exibe o botão de salvar (Mantido)
+    // 7. Exibe o botão de salvar 
     addHistoryBtn.classList.remove('hidden');
 });
 
-// Event Listener para o botão "Adicionar ao Histórico" (Mantido)
+// Event Listener para o botão "Adicionar ao Histórico" 
 if (addHistoryBtn) {
     addHistoryBtn.addEventListener('click', () => {
         if (lastHistoryData) {
@@ -388,27 +385,25 @@ function renderResultado(r) {
     resultadoContainer.scrollIntoView({ behavior: "smooth" });
 }
 
-/**
- * FUNÇÃO PARA RENDERIZAR O GRÁFICO (AGORA ROBUSTA)
- */
+
 function renderChart(seriesData) {
     const chartContainer = document.querySelector('#chart-section .form-container');
     const chartSection = document.getElementById("chart-section");
     
-    // ⚠️ CORREÇÃO 1: Verifica a existência do objeto global Chart.js
+    
     if (typeof Chart === 'undefined') {
         chartSection.classList.remove('hidden');
         chartContainer.innerHTML = '<p class="text-center" style="color: #ccc; padding: 20px;">ERRO: Biblioteca Chart.js não carregada. Adicione o script ao HTML para visualizar o gráfico.</p>';
         return; 
     }
     
-    // ⚠️ CORREÇÃO 2: Destrói a instância ANTES de recriar o canvas
+    
     if (chartInstance) {
         chartInstance.destroy();
         chartInstance = null;
     }
 
-    // ⚠️ CORREÇÃO 3: Limpa e recria o canvas para evitar erros de re-renderização
+    
     chartContainer.innerHTML = '<canvas id="patrimonio-chart"></canvas>';
     const chartCanvas = document.getElementById('patrimonio-chart');
     

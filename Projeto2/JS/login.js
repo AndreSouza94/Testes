@@ -119,7 +119,6 @@ document.querySelector(".form-side form").addEventListener("submit", function(e)
 });
 
 // --- Função de cadastro (Utilizando simulação local) ---
-// Note que agora selecionamos pelo ID do formulário para evitar conflitos
 document.querySelector(".form-back form").addEventListener("submit", function(e) {
     e.preventDefault();
 
