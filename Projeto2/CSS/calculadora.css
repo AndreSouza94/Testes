@@ -82,7 +82,35 @@ body {
   margin-bottom: 30px;
 }
 
-/* ===== CARDS DE TAXAS ===== */
+/* ===== GRID PRINCIPAL (LADO A LADO) ===== */
+.main-content-grid {
+    display: grid;
+    grid-template-columns: 1fr; /* Padrão Mobile: 1 coluna */
+    gap: 30px;
+    margin-top: 30px; 
+}
+
+@media (min-width: 960px) {
+    .main-content-grid {
+        grid-template-columns: 1fr 1fr; /* Desktop: 2 colunas de tamanho igual */
+    }
+}
+
+/* Painel Esquerdo (Formulário) */
+.left-panel {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Painel Direito (Resultados e Gráfico) */
+.right-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Espaço entre as seções no painel direito */
+}
+
+
+/* ===== CARDS DE TAXAS (MANTIDO) ===== */
 .taxas-container {
   display: flex;
   gap: 16px;
@@ -115,13 +143,13 @@ body {
   font-weight: bold;
 }
 
-/* ===== FORM ===== */
+/* ===== FORM (Ajustado) ===== */
 .form-container {
   background: rgba(255,255,255,0.04);
   padding: 20px;
   border-radius: 14px;
   border: 1px solid rgba(255,255,255,0.08);
-  margin-bottom: 30px;
+  margin-bottom: 0; /* Removido margin-bottom: 30px; para o grid */
 }
 
 .secao-titulo {
@@ -263,7 +291,7 @@ input:focus, select:focus {
   filter: brightness(1.1);
 }
 
-/* ===== RESULTADOS (Ajustado para 3 colunas em telas maiores) ===== */
+/* ===== RESULTADOS (MANTIDO) ===== */
 .resultado-container {
   margin-top: 20px;
 }
@@ -304,4 +332,23 @@ input:focus, select:focus {
   font-weight: 600;
   margin-top: 6px;
   color: #ffa533;
+}
+
+/* ===== GRÁFICO (CHART-SECTION) ===== */
+.chart-section .form-container {
+    /* Reutiliza o estilo do container do formulário para o fundo do gráfico */
+    background: rgba(255,255,255,0.04);
+    padding: 20px;
+    border-radius: 14px;
+    border: 1px solid rgba(255,255,255,0.08);
+}
+
+.chart-section h2 {
+    margin-top: 0 !important;
+    margin-bottom: 20px;
+}
+
+/* Ajuste da margem superior do container de resultados no painel direito */
+.right-panel .resultado-container {
+    margin-top: 0; 
 }

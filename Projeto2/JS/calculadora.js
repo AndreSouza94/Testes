@@ -8,7 +8,10 @@
     // A chamada renderTaxas() foi movida para o evento DOMContentLoaded, mais abaixo.
 })();
 
-// ===== MOCK DE TAXAS (CORRIGIDO E ATUALIZADO) =====
+// Variável global para armazenar a instância do gráfico
+let chartInstance = null;
+
+// ===== MOCK DE TAXAS (MANTIDO) =====
 const taxas = {
   selic: 15.00,
   cdi: 14.90,
@@ -19,7 +22,7 @@ const taxas = {
 // Variável global para armazenar o payload completo para salvar no histórico
 let lastHistoryData = null; 
 
-// ===== LÓGICA DE HISTÓRICO E UTILITÁRIOS (Sem alterações substanciais no corpo da função) =====
+// ===== LÓGICA DE HISTÓRICO E UTILITÁRIOS (MANTIDO) =====
 
 /**
  * Funções auxiliares para localStorage (mantido do código original)
@@ -64,25 +67,20 @@ function cleanCurrency(value) {
 
 /**
  * Calcula a diferença em dias entre duas datas (inclusive).
- * CORRIGIDO: Agora calcula a diferença correta em dias corridos.
  */
 function calculateDays(dateInitial, dateFinal) {
     const dtInitial = new Date(dateInitial + 'T00:00:00'); 
     const dtFinal = new Date(dateFinal + 'T00:00:00');
     
-    // Calcula a diferença em milissegundos
     const diffTime = dtFinal - dtInitial; 
-    
-    // Converte para dias (1000ms * 60s * 60m * 24h)
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
     
-    // Retorna a diferença de dias. Se for 0, deve ser 1 (o mesmo dia) ou a diferença positiva.
     return diffDays > 0 ? diffDays : 1; 
 }
 
 
 /**
- * Calcula o número de ciclos mensais completos e/ou parciais (para o cálculo de aportes).
+ * Calcula o número de ciclos mensais.
  */
 function calculateMonths(dateInitial, dateFinal) {
     const dtInitial = new Date(dateInitial + 'T00:00:00');
@@ -92,16 +90,15 @@ function calculateMonths(dateInitial, dateFinal) {
     months -= dtInitial.getMonth();
     months += dtFinal.getMonth();
     
-    // Se a data final for posterior ou igual à data inicial no mês de vencimento, conta o mês.
     if (dtFinal.getDate() >= dtInitial.getDate() && months >= 0) {
-        months += 1; // Inclui o mês de vencimento.
+        months += 1;
     }
     
     return months > 0 ? months : 0;
 }
 
 
-// ===== CÁLCULOS FINANCEIROS (REVISÃO FINAL) =====
+// ===== CÁLCULOS FINANCEIROS (MANTIDO) =====
 
 /**
  * Simula o cálculo de IR (tabela regressiva)
@@ -115,30 +112,17 @@ function calcularIR(lucro, tempoDias, tipo) {
     // O IR só é aplicado sobre o lucro (rendimento) positivo
     if (lucro <= 0) return 0;
     
-    // IR só é aplicado se o prazo for maior que 180 dias
-    if (tempoDias <= 180) {
-        return 0; // Alíquota de 22.5% é aplicada no rendimento se < 180 dias.
-                  // NO ENTANTO, para a maioria das simulações, o IR é retido na fonte.
-                  // O código original do IR estava bugado. Reajustando para a tabela.
-        /* Lógica correta (mas o código anterior do IR estava sendo aplicado para < 180 dias)
-         * Como o IR é retido, e o objetivo é simular, voltamos à tabela regressiva
-         * e corrigimos o erro de arredondamento/erro do código anterior.
-         */
-    }
-
     let aliquota;
-    if (tempoDias <= 360) { // > 180 e <= 360
-        aliquota = 0.20;
-    } else if (tempoDias <= 720) { // > 360 e <= 720
-        aliquota = 0.175;
-    } else { // > 720
-        aliquota = 0.15; 
-    }
-
-    // Aplica a maior alíquota para prazos curtos (181 a 360)
-    // Se o prazo for <= 180 dias, o IR é de 22,5%.
+    
+    // Aplica a alíquota correta baseada no tempoDias
     if (tempoDias <= 180) {
-         aliquota = 0.225;
+        aliquota = 0.225;
+    } else if (tempoDias <= 360) {
+        aliquota = 0.20;
+    } else if (tempoDias <= 720) {
+        aliquota = 0.175;
+    } else {
+        aliquota = 0.15; 
     }
     
     return lucro * aliquota;
@@ -146,33 +130,48 @@ function calcularIR(lucro, tempoDias, tipo) {
 
 
 /**
- * Executa o cálculo principal da simulação, com capitalização MENSAL
- * (para ser consistente com o modelo de aporte) e ajuste diário no final.
+ * Executa o cálculo principal da simulação, e agora GERA A SÉRIE MENSAL.
  */
 function runSimulation(valorInicial, taxaAnual, dataInicial, dataFinal, aporteMensal, tipo) {
     const taxaAnualDecimal = taxaAnual / 100;
     const tipoLower = tipo.toLowerCase(); // Facilita a verificação de tipo
     const tempoDiasTotal = calculateDays(dataInicial, dataFinal);
 
-    // Taxa Mensal Equivalente: i_m = (1 + i_anual)^(1/12) - 1 
     const taxaMensalDecimal = Math.pow(1 + taxaAnualDecimal, 1 / 12) - 1;
+    const taxaDiariaDecimal = Math.pow(1 + taxaAnualDecimal, 1 / 365) - 1;
     
-    // Utiliza 30 dias como ciclo mensal para o cálculo
     const numMesesCompletos = Math.floor(tempoDiasTotal / 30); 
     const diasResiduais = tempoDiasTotal % 30;
     
     let valorAcumulado = valorInicial;
     let totalAportado = valorInicial;
+    
+    // --- Geração da Série para Gráfico ---
+    const monthlySeries = [];
+    
+    // Ponto inicial
+    monthlySeries.push({
+        periodo: 'Mês 0',
+        patrimonio: valorInicial,
+        aportado: valorInicial
+    });
 
     // 1. Simulação dos Meses Completos
     if (aporteMensal > 0) {
         for (let m = 0; m < numMesesCompletos; m++) {
+            
             // Aplica juros do mês
             valorAcumulado *= (1 + taxaMensalDecimal);
             
             // Aplica o aporte mensal 
             valorAcumulado += aporteMensal;
             totalAportado += aporteMensal;
+            
+            monthlySeries.push({
+                periodo: `Mês ${m + 1}`,
+                patrimonio: valorAcumulado,
+                aportado: totalAportado
+            });
         }
     } else {
         // Se SEM APORTE, o cálculo é feito em dias corridos, mantendo precisão
@@ -185,6 +184,30 @@ function runSimulation(valorInicial, taxaAnual, dataInicial, dataFinal, aporteMe
         const taxaDiariaDecimal = Math.pow(1 + taxaAnualDecimal, 1 / 365) - 1;
         valorAcumulado *= Math.pow(1 + taxaDiariaDecimal, diasResiduais);
     } 
+    
+    // Atualiza o último ponto da série se houver dias residuais ou for uma série curta sem aporte
+    if (monthlySeries.length > 1 || aporteMensal === 0) {
+        const ultimoIndice = monthlySeries.length - 1;
+        
+        if (aporteMensal === 0) {
+             // Para simulações sem aporte, calcula apenas o ponto final
+             const taxaDiariaDecimal = Math.pow(1 + taxaAnualDecimal, 1 / 365) - 1;
+             const valorFinalSemAporte = valorInicial * Math.pow(1 + taxaDiariaDecimal, tempoDiasTotal);
+             
+             // Limpa e adiciona apenas os pontos inicial e final
+             monthlySeries.length = 0;
+             monthlySeries.push({ periodo: 'Mês 0', patrimonio: valorInicial, aportado: valorInicial });
+             monthlySeries.push({ periodo: `${tempoDiasTotal} dias (Final)`, patrimonio: valorFinalSemAporte, aportado: valorInicial });
+             
+        } else if (diasResiduais > 0) {
+             // Atualiza o último ponto da série com o valor final preciso
+             monthlySeries[ultimoIndice] = {
+                 periodo: monthlySeries[ultimoIndice].periodo.replace('Mês', 'Mês Final'),
+                 patrimonio: valorAcumulado,
+                 aportado: totalAportado 
+             };
+        }
+    }
 
 
     // --- 3. CONSOLIDAÇÃO E IMPOSTOS ---
@@ -200,7 +223,7 @@ function runSimulation(valorInicial, taxaAnual, dataInicial, dataFinal, aporteMe
     const iofTaxa = (rendimentoBruto > 0 && tempoDiasTotal < 30) ? 0.1 : 0; 
     const impostoIOF = rendimentoBruto * iofTaxa;
     
-    // Taxas: 0.2% a.a (simplificação) - aplicada proporcionalmente aos dias
+    // Taxas: 0.2% a.a (simulação de taxa de custódia do Tesouro)
     const taxaAnualMocada = 0.002; 
     // Taxas SÓ são aplicadas se for Tesouro Direto
     const taxas = (tipoLower.includes('tesouro')) ? (valorFinalBruto * taxaAnualMocada * (tempoDiasTotal / 365)) : 0; 
@@ -222,14 +245,17 @@ function runSimulation(valorInicial, taxaAnual, dataInicial, dataFinal, aporteMe
         lucroLiquido: lucroLiquido,
         percentual: percentual,
         tempoDiasTotal: tempoDiasTotal,
-        totalAportado: totalAportado
+        totalAportado: totalAportado,
+        // DADOS PARA O GRÁFICO
+        monthlySeries: monthlySeries 
     };
 }
 
 
-// ===== RENDERIZAÇÃO E EVENT HANDLERS (Apenas ajustes para o novo payload) =====
+// ===== RENDERIZAÇÃO E EVENT HANDLERS (Chamada ao Gráfico) =====
 const form = document.getElementById("form-calculadora");
 const resultadoContainer = document.getElementById("resultado-container");
+const chartSection = document.getElementById("chart-section");
 const inputRentabilidade = document.getElementById("rentabilidade");
 const inputAporteMensal = document.getElementById("aporte-mensal");
 const checkAporte = document.getElementById("check-aporte");
@@ -238,23 +264,21 @@ const taxasContainer = document.getElementById("taxas-container");
 const addHistoryBtn = document.getElementById("addHistoryBtn"); 
 
 
-// Lógica para habilitar/desabilitar o campo de Aporte (Sem alteração)
+// Lógica para habilitar/desabilitar o campo de Aporte (Mantido)
 checkAporte.addEventListener('change', () => {
     if (checkAporte.checked) {
         grupoAporte.classList.remove('hidden');
         inputAporteMensal.disabled = false;
-        // Foca no campo quando habilitado
         inputAporteMensal.focus(); 
     } else {
         grupoAporte.classList.add('hidden');
         inputAporteMensal.disabled = true;
-        // Zera o valor do input quando desabilitado, garantindo 0,00 no cálculo
         inputAporteMensal.value = '0,00'; 
     }
 });
 
 
-// Adicionado para formatar input de aporte para moeda BR (Sem alteração)
+// Adicionado para formatar input de aporte para moeda BR (Mantido)
 inputAporteMensal.addEventListener('blur', (e) => {
     e.target.value = cleanCurrency(e.target.value).toLocaleString('pt-BR', { minimumFractionDigits: 2 });
 });
@@ -263,11 +287,11 @@ inputAporteMensal.addEventListener('blur', (e) => {
 form.addEventListener("submit", (e) => {
     e.preventDefault();
     
-    // Limpa o estado anterior
     lastHistoryData = null;
     addHistoryBtn.classList.add('hidden'); 
+    chartSection.classList.add('hidden'); // Oculta o gráfico antes do cálculo
 
-    // 1. Limpeza e Coleta de Dados
+    // 1. Coleta de Dados (Mantido)
     const tipo = document.getElementById("tipo").value;
     const valor = cleanCurrency(document.getElementById("valor").value);
     const dataInicial = document.getElementById("data-inicial").value;
@@ -275,13 +299,12 @@ form.addEventListener("submit", (e) => {
     const rentabilidadeStr = inputRentabilidade.value.trim();
     const rentabilidade = cleanCurrency(rentabilidadeStr);
     
-    // NOVO: Coleta o aporte, mas zera se o checkbox não estiver marcado
     let aporteMensal = 0;
     if (checkAporte.checked) {
         aporteMensal = cleanCurrency(inputAporteMensal.value);
     }
     
-    // 2. Validação Adicional de Datas
+    // 2. Validação (Mantido)
     if (new Date(dataInicial) >= new Date(dataFinal)) {
         alert("A Data Final deve ser posterior à Data Inicial.");
         return;
@@ -293,35 +316,33 @@ form.addEventListener("submit", (e) => {
     // 4. Renderiza o Resultado
     renderResultado(resultados);
     
-    // 5. Prepara dados para salvar no histórico
+    // 5. Renderiza o Gráfico (NOVO)
+    renderChart(resultados.monthlySeries);
     
+    // 6. Prepara dados para salvar no histórico (Mantido)
     lastHistoryData = {
-        tipo: tipo.toUpperCase(), // SALVA EM MAIÚSCULO para consistência
+        tipo: tipo.toUpperCase(), 
         valorInicial: valor,
         rentabilidadePercentual: rentabilidade,
         tempoDias: resultados.tempoDiasTotal,
-        
-        // Campos de resultado estendidos (Detalhado)
         valorFinalBruto: resultados.valorFinalBruto, 
         valorFinalLiquido: resultados.valorFinalLiquido, 
         rendimentoBruto: resultados.rendimentoBruto, 
         impostoIR: resultados.impostoIR,
         impostoIOF: resultados.impostoIOF,
         taxas: resultados.taxas,
-        
         lucroLiquido: resultados.lucroLiquido, 
         percentual: resultados.percentual, 
     };
 
-    // 6. Exibe o botão de salvar (salvamento desativado - agora é manual)
+    // 7. Exibe o botão de salvar (Mantido)
     addHistoryBtn.classList.remove('hidden');
 });
 
-// Event Listener para o botão "Adicionar ao Histórico" (Salvamento Manual)
+// Event Listener para o botão "Adicionar ao Histórico" (Mantido)
 if (addHistoryBtn) {
     addHistoryBtn.addEventListener('click', () => {
         if (lastHistoryData) {
-            // Cria um payload para o histórico com as colunas necessárias
             const dataToSave = {
                 tipo: lastHistoryData.tipo,
                 valorInicial: lastHistoryData.valorInicial,
@@ -338,7 +359,7 @@ if (addHistoryBtn) {
             
             if (saveSimulationToHistory(dataToSave)) {
                 alert(`Simulação de ${lastHistoryData.tempoDias} dias salva no Histórico com sucesso!`);
-                addHistoryBtn.classList.add('hidden'); // Oculta o botão após salvar
+                addHistoryBtn.classList.add('hidden');
             }
         } else {
             alert("Nenhum resultado de simulação para salvar. Calcule primeiro.");
@@ -348,7 +369,7 @@ if (addHistoryBtn) {
 
 
 /**
- * Renderiza os cards de resultado.
+ * Renderiza os resultados numéricos.
  */
 function renderResultado(r) {
     const formatCurrency = (value) => value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
@@ -363,21 +384,141 @@ function renderResultado(r) {
     document.getElementById("res-lucro-liquido").textContent = formatCurrency(r.lucroLiquido);
     document.getElementById("res-percentual").textContent = formatPercent(r.percentual);
     
-    // Exibe o container de resultados
     resultadoContainer.classList.remove('hidden');
-    // scroll até o resultado com efeito suave
     resultadoContainer.scrollIntoView({ behavior: "smooth" });
 }
 
-// ===== RENDERIZAÇÃO DOS CARDS DE TAXA (CORRIGIDO) =====
+/**
+ * FUNÇÃO PARA RENDERIZAR O GRÁFICO (AGORA ROBUSTA)
+ */
+function renderChart(seriesData) {
+    const chartContainer = document.querySelector('#chart-section .form-container');
+    const chartSection = document.getElementById("chart-section");
+    
+    // ⚠️ CORREÇÃO 1: Verifica a existência do objeto global Chart.js
+    if (typeof Chart === 'undefined') {
+        chartSection.classList.remove('hidden');
+        chartContainer.innerHTML = '<p class="text-center" style="color: #ccc; padding: 20px;">ERRO: Biblioteca Chart.js não carregada. Adicione o script ao HTML para visualizar o gráfico.</p>';
+        return; 
+    }
+    
+    // ⚠️ CORREÇÃO 2: Destrói a instância ANTES de recriar o canvas
+    if (chartInstance) {
+        chartInstance.destroy();
+        chartInstance = null;
+    }
+
+    // ⚠️ CORREÇÃO 3: Limpa e recria o canvas para evitar erros de re-renderização
+    chartContainer.innerHTML = '<canvas id="patrimonio-chart"></canvas>';
+    const chartCanvas = document.getElementById('patrimonio-chart');
+    
+    try {
+        const labels = seriesData.map(d => d.periodo);
+        const patrimonio = seriesData.map(d => d.patrimonio);
+        const aportado = seriesData.map(d => d.aportado);
+        
+        chartInstance = new Chart(chartCanvas, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Patrimônio Total (Valor de Mercado)',
+                    data: patrimonio,
+                    borderColor: '#ffa533', 
+                    backgroundColor: 'rgba(255, 165, 51, 0.2)',
+                    fill: true,
+                    tension: 0.2
+                }, {
+                    label: 'Total Aportado (Capital Investido)',
+                    data: aportado,
+                    borderColor: '#007bff', 
+                    backgroundColor: 'rgba(0, 123, 255, 0.2)',
+                    fill: false,
+                    tension: 0.2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Valor (R$)',
+                            color: '#ccc'
+                        },
+                        ticks: {
+                            color: '#ccc',
+                            callback: function(value) {
+                                return 'R$ ' + value.toLocaleString('pt-BR');
+                            }
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)',
+                            borderColor: 'rgba(255, 255, 255, 0.1)'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Período',
+                            color: '#ccc'
+                        },
+                        ticks: {
+                            color: '#ccc'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)',
+                            borderColor: 'rgba(255, 255, 255, 0.1)'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: '#fff' 
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.parsed.y !== null) {
+                                    label += 'R$ ' + context.parsed.y.toFixed(2).replace('.', ',');
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        chartSection.classList.remove('hidden');
+        chartSection.scrollIntoView({ behavior: "smooth" });
+
+    } catch (e) {
+        // Garante que o usuário veja a área do gráfico e um erro amigável
+        console.error("Erro ao renderizar o gráfico Chart.js:", e);
+        chartSection.classList.remove('hidden');
+        chartContainer.innerHTML = '<p class="text-center" style="color: #ccc; padding: 20px;">Houve um erro interno ao gerar o gráfico. O cálculo funcionou, mas a visualização falhou. Verifique o console para detalhes.</p>';
+        chartInstance = null;
+        return;
+    }
+}
+
+// ===== RENDERIZAÇÃO DOS CARDS DE TAXA (MANTIDO) =====
 
 function renderTaxas() {
   const taxasContainer = document.getElementById("taxas-container");
-  taxasContainer.innerHTML = ''; // Limpa antes de renderizar
+  taxasContainer.innerHTML = ''; 
   Object.entries(taxas).forEach(([chave, valor]) => {
     const card = document.createElement("div");
     card.classList.add("card-taxa");
-    // Formata o valor para 2 casas decimais, usando vírgula
     const valorFormatado = valor.toFixed(2).replace('.', ',');
     card.innerHTML = `
       <div class="label">${chave.toUpperCase()}</div>
@@ -387,9 +528,7 @@ function renderTaxas() {
   });
 }
 
-// ** CHAVE DE CORREÇÃO **: Executa a renderização das taxas quando o DOM estiver pronto
 document.addEventListener('DOMContentLoaded', () => {
-    // A variável taxasContainer (que depende do DOM) é inicializada aqui
     const taxasContainer = document.getElementById("taxas-container");
     if (taxasContainer) {
         renderTaxas();
