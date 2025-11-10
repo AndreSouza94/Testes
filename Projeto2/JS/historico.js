@@ -29,9 +29,13 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // Helper functions for formatting (ADICIONADAS)
+
+// Ajustada para garantir que valores monetários sejam formatados corretamente.
 const formatCurrency = (value) => {
     const numberValue = parseFloat(value);
     if (isNaN(numberValue)) return 'R$ 0,00';
+    
+    // Exibe o valor formatado com 2 casas decimais
     return numberValue.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 };
 
@@ -71,7 +75,7 @@ function renderTable(simulations) {
     const tableBody = document.getElementById('investmentTable');
     tableBody.innerHTML = ''; // Limpa as linhas existentes
     
-    const COLUMNS_COUNT = 11; // 1 (Checkbox) + 10 colunas de dados
+    const COLUMNS_COUNT = 13; // 1 (Checkbox) + 12 colunas de dados
     
     if (simulations.length === 0) {
         const row = tableBody.insertRow();
@@ -88,7 +92,12 @@ function renderTable(simulations) {
         const valorInicial = sim.valorInicial || 0;
         const valorFinalLiquido = sim.valorFinalLiquido || 0;
         const rendimentoBruto = sim.rendimentoBruto || 0;
-        const impostosTotais = sim.impostosTotais || 0;
+        
+        // NOVOS DETALHES DE IMPOSTOS
+        const impostoIR = sim.impostoIR || 0;
+        const impostoIOF = sim.impostoIOF || 0;
+        const taxasAdmin = sim.taxas || 0;
+        
         const lucroLiquido = sim.lucroLiquido || (valorFinalLiquido - valorInicial);
         const percentual = sim.percentual || 0;
         
@@ -100,15 +109,14 @@ function renderTable(simulations) {
             <td class="text-center">${sim.tempoDias || 'N/A'}</td>
             <td class="text-center">${formatPercent(sim.rentabilidadePercentual || 0)}</td>
             <td class="text-right">${formatCurrency(rendimentoBruto)}</td>
-            <td class="text-right">${formatCurrency(impostosTotais)}</td>
-            <td class="text-right">${formatCurrency(valorFinalLiquido)}</td>
+            <td class="text-right">${formatCurrency(impostoIR)}</td>     <td class="text-right">${formatCurrency(impostoIOF)}</td>    <td class="text-right">${formatCurrency(taxasAdmin)}</td>    <td class="text-right">${formatCurrency(valorFinalLiquido)}</td>
             <td class="text-right">${formatCurrency(lucroLiquido)}</td>
             <td class="text-center">${formatPercent(percentual)}</td>
         `;
         
         // Aplica cores de lucro/prejuízo
-        const lucroCell = row.cells[9];
-        const percentualCell = row.cells[10];
+        const lucroCell = row.cells[11]; 
+        const percentualCell = row.cells[12]; 
 
         if (lucroLiquido < 0) {
             lucroCell.classList.add('error-text');

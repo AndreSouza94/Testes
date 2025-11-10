@@ -4,10 +4,11 @@ document.getElementById("exportCsv").addEventListener("click", function() {
   const headerCells = table.querySelectorAll('thead th');
   let csv = [];
 
+  const COLUMNS_COUNT = headerCells.length; // Será 13 (1 checkbox + 12 dados)
+
   // 1. Pega as colunas do cabeçalho, ignorando a primeira (Checkbox)
   let header = [];
-  // Itera de 1 até o final para pegar todos os cabeçalhos de dados (10 colunas)
-  const COLUMNS_COUNT = headerCells.length;
+  // Itera de 1 até o final para pegar todos os cabeçalhos de dados (12 colunas)
   for (let i = 1; i < COLUMNS_COUNT; i++) {
     header.push(`"${headerCells[i].innerText.trim()}"`);
   }
@@ -20,13 +21,12 @@ document.getElementById("exportCsv").addEventListener("click", function() {
     if (row.cells.length < COLUMNS_COUNT) return; 
 
     let rowData = [];
-    // Itera da coluna 1 (Data e Hora) até a penúltima coluna (10 colunas de dados)
+    // Itera da coluna 1 (Data e Hora) até a última coluna de dados (12 colunas de dados)
     for (let j = 1; j < COLUMNS_COUNT; j++) {
         let cellText = row.cells[j].innerText.trim();
         
         // Limpa 'R$' ou '%', remove pontos de milhar, troca vírgula decimal por ponto.
         cellText = cellText.replace('R$', '').replace('%', '').trim();
-        // Substitui o ponto (separador de milhar) por nada e a vírgula (separador decimal) por ponto
         cellText = cellText.split('.').join('').replace(',', '.'); 
         
         rowData.push(`"${cellText}"`);
