@@ -136,6 +136,22 @@ body {
   margin-bottom: 16px;
 }
 
+/* ESTILO NOVO PARA AS DATAS (Layout de duas colunas) */
+.form-grupo-datas {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+.form-grupo-datas .form-grupo {
+    margin-bottom: 0; /* Remove a margem extra, já controlada pelo gap */
+}
+@media (max-width: 600px) {
+    .form-grupo-datas {
+        grid-template-columns: 1fr;
+    }
+}
+
 .form-grupo label {
   display: block;
   margin-bottom: 6px;
@@ -150,6 +166,11 @@ input, select {
   border: 1px solid rgba(255,255,255,0.1);
   background: rgba(255,255,255,0.05);
   color: #fff;
+}
+
+/* Estiliza o placeholder para melhor visibilidade */
+input::placeholder {
+    color: #888;
 }
 
 input:focus, select:focus {
@@ -174,22 +195,31 @@ input:focus, select:focus {
   filter: brightness(1.1);
 }
 
-/* ===== RESULTADOS ===== */
+/* ===== RESULTADOS (Ajustado para 3 colunas em telas maiores) ===== */
 .resultado-container {
   margin-top: 20px;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 16px;
+  /* display: flex; REMOVIDO para usar grid */
+}
+
+.cards-resultado-detalhe {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-top: 20px;
+}
+@media (max-width: 600px) {
+    .cards-resultado-detalhe {
+        grid-template-columns: 1fr;
+    }
 }
 
 .card-resultado {
   background: rgba(255,255,255,0.04);
   padding: 16px;
   border-radius: 12px;
-  min-width: 180px;
   border: 1px solid rgba(255,255,255,0.1);
   transition: 0.2s;
+  text-align: left;
 }
 
 .card-resultado:hover {
@@ -199,6 +229,7 @@ input:focus, select:focus {
 .card-resultado .label {
   font-size: 12px;
   color: #ccc;
+  white-space: nowrap;
 }
 
 .card-resultado .valor {
