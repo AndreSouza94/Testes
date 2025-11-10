@@ -26,9 +26,23 @@
     <section class="taxas-container" id="taxas-container">
       </section>
     
-    <div class="main-content-grid">
+    <div class="side-by-side-layout">
 
-        <div class="left-panel">
+        <div class="results-column">
+            <section class="resultado-container hidden" id="resultado-container">
+                <h2 class="secao-titulo">Resultados</h2>
+                <div class="cards-resultado-detalhe">
+                    <div class="card-resultado"><div class="label">Valor Final Bruto</div><div class="valor" id="res-bruto">R$ 0,00</div></div>
+                    <div class="card-resultado"><div class="label">Rendimento Bruto</div><div class="valor" id="res-rendimento-bruto">R$ 0,00</div></div>
+                    <div class="card-resultado"><div class="label">Imposto (IR/IOF)</div><div class="valor" id="res-imposto">R$ 0,00</div></div>
+                    <div class="card-resultado"><div class="label">Valor Final Líquido</div><div class="valor" id="res-liquido">R$ 0,00</div></div>
+                    <div class="card-resultado"><div class="label">Lucro Líquido</div><div class="valor" id="res-lucro-liquido">R$ 0,00</div></div>
+                    <div class="card-resultado"><div class="label">Ganho/Perda (%)</div><div class="valor" id="res-percentual">0,00%</div></div>
+                </div>
+            </section>
+        </div>
+
+        <div class="form-column">
             <section class="form-container">
                 <h2 class="secao-titulo">Preencha os dados para simular</h2>
 
@@ -82,30 +96,17 @@
                 Adicionar ao Histórico
             </button>
         </div>
-        
-        <div class="right-panel">
-            <section class="resultado-container hidden" id="resultado-container">
-                <h2 class="secao-titulo">Resultados</h2>
-                <div class="cards-resultado-detalhe">
-                    <div class="card-resultado"><div class="label">Valor Final Bruto</div><div class="valor" id="res-bruto">R$ 0,00</div></div>
-                    <div class="card-resultado"><div class="label">Rendimento Bruto</div><div class="valor" id="res-rendimento-bruto">R$ 0,00</div></div>
-                    <div class="card-resultado"><div class="label">Imposto (IR/IOF)</div><div class="valor" id="res-imposto">R$ 0,00</div></div>
-                    <div class="card-resultado"><div class="label">Valor Final Líquido</div><div class="valor" id="res-liquido">R$ 0,00</div></div>
-                    <div class="card-resultado"><div class="label">Lucro Líquido</div><div class="valor" id="res-lucro-liquido">R$ 0,00</div></div>
-                    <div class="card-resultado"><div class="label">Ganho/Perda (%)</div><div class="valor" id="res-percentual">0,00%</div></div>
-                </div>
-            </section>
-            
-            <section class="chart-section hidden" id="chart-section">
-                <h2 class="secao-titulo" style="margin-top: 40px;">Evolução do Patrimônio vs. Aportes</h2>
-                <div class="form-container">
-                    <canvas id="patrimonio-chart"></canvas>
-                </div>
-            </section>
-        </div>
 
     </div>
-      </main>
+    <section class="chart-section hidden" id="chart-section">
+        <h2 class="secao-titulo" style="margin-top: 40px;">Evolução do Patrimônio vs. Aportes</h2>
+        
+        <div class="form-container">
+            <canvas id="patrimonio-chart"></canvas>
+        </div>
+    </section>
+
+  </main>
 
   <script src="./JS/calculadora.js"></script>
 </body>

@@ -1,354 +1,732 @@
 /* ===== RESET BÁSICO ===== */
+
 * {
+
   margin: 0;
+
   padding: 0;
+
   box-sizing: border-box;
+
   font-family: 'Inter', sans-serif;
+
 }
+
+
 
 body {
+
   background: #0d0d0f;
+
   color: #fff;
+
   padding-bottom: 50px;
+
 }
+
+
 
 /* ===== HEADER ===== */
+
 .header {
+
   width: 100%;
+
   padding: 20px 40px;
+
   display: flex;
+
   justify-content: space-between;
+
   align-items: center;
+
 }
+
+
 
 .logo {
+
   font-size: 20px;
+
   font-weight: 600;
+
   color: #ffa533;
+
 }
+
+
 
 .btn-voltar {
+
   color: #ffa533;
+
   font-size: 14px;
+
   text-decoration: none;
+
   border: 1px solid #ffa533;
+
   padding: 6px 14px;
+
   border-radius: 6px;
+
   transition: 0.3s ease;
+
 }
+
+
 
 .btn-voltar:hover {
+
   background: #ffa533;
+
   color: #000;
+
 }
+
+
 
 .btn-historico {
+
   color: #ffa533;
+
   font-size: 14px;
+
   text-decoration: none;
+
   border: 1px solid #ffa533;
+
   padding: 6px 14px;
+
   border-radius: 6px;
+
   transition: 0.3s ease;
+
 }
+
+
 
 .btn-historico:hover {
+
   background: #ffa533;
+
   color: #000;
+
 }
+
+
 
 /* ===== CONTAINER PRINCIPAL ===== */
+
 .container {
+
   width: 100%;
+
   max-width: 960px;
+
   margin: 0 auto;
+
   padding: 20px;
+
   text-align: center;
+
 }
+
+
 
 .titulo {
+
   font-size: 28px;
+
   font-weight: 600;
+
   margin-bottom: 8px;
+
   background: linear-gradient(90deg, #ffa533, #ffd38a);
-  background-clip: text; 
+
+  background-clip: text;
+
   -webkit-background-clip: text;
+
   -webkit-text-fill-color: transparent;
+
 }
+
+
 
 .subtitulo {
+
   font-size: 14px;
+
   color: #aaa;
+
   margin-bottom: 30px;
+
 }
 
-/* ===== GRID PRINCIPAL (LADO A LADO) ===== */
-.main-content-grid {
-    display: grid;
-    grid-template-columns: 1fr; /* Padrão Mobile: 1 coluna */
-    gap: 30px;
-    margin-top: 30px; 
-}
-
-@media (min-width: 960px) {
-    .main-content-grid {
-        grid-template-columns: 1fr 1fr; /* Desktop: 2 colunas de tamanho igual */
-    }
-}
-
-/* Painel Esquerdo (Formulário) */
-.left-panel {
-    display: flex;
-    flex-direction: column;
-}
-
-/* Painel Direito (Resultados e Gráfico) */
-.right-panel {
-    display: flex;
-    flex-direction: column;
-    gap: 20px; /* Espaço entre as seções no painel direito */
-}
 
 
 /* ===== CARDS DE TAXAS (MANTIDO) ===== */
+
 .taxas-container {
+
   display: flex;
+
   gap: 16px;
+
   justify-content: center;
+
   margin-bottom: 30px;
+
 }
+
+
 
 .card-taxa {
+
   background: rgba(255,255,255,0.03);
+
   padding: 14px 18px;
+
   border-radius: 10px;
+
   backdrop-filter: blur(6px);
+
   border: 1px solid rgba(255,255,255,0.06);
+
   width: 120px;
+
   transition: 0.2s;
+
 }
+
+
 
 .card-taxa:hover {
+
   border-color: #ffa533;
+
 }
+
+
 
 .card-taxa .label {
+
   font-size: 12px;
+
   color: #aaa;
+
   margin-bottom: 4px;
+
 }
+
+
 
 .card-taxa .valor {
+
   font-size: 20px;
+
   font-weight: bold;
+
 }
+
+
+
+/* ===== GRID PRINCIPAL (LADO A LADO) ===== */
+
+.side-by-side-layout {
+
+    display: grid;
+
+    grid-template-columns: 1fr; /* Padrão Mobile: 1 coluna */
+
+    gap: 20px;
+
+    margin-top: 30px;
+
+    align-items: start; /* Alinha o topo dos cards */
+
+}
+
+
+
+@media (min-width: 960px) {
+
+    .side-by-side-layout {
+
+        /* Coluna Esquerda (Formulário) : Coluna Direita (Resultados) */
+
+        grid-template-columns: 0.9fr 1.6fr;
+
+    }
+
+}
+
+
+
+
+
+/* Colunas (ajustado para aceitar Formulário e Resultados) */
+
+
+
+
+
+.form-column {
+
+  order: 1;
+
+}
+
+
+
+.results-column {
+
+  order: 2;
+
+}
+
+
+
+
+
+
 
 /* ===== FORM (Ajustado) ===== */
+
 .form-container {
+
   background: rgba(255,255,255,0.04);
+
   padding: 20px;
+
   border-radius: 14px;
+
   border: 1px solid rgba(255,255,255,0.08);
-  margin-bottom: 0; /* Removido margin-bottom: 30px; para o grid */
+
+  margin-bottom: 0;
+
+  text-align: left; /* Garante que o texto dentro do formulário não seja centralizado */
+
 }
+
+
 
 .secao-titulo {
+
   font-size: 16px;
+
   margin-bottom: 20px;
+
   font-weight: 600;
+
   color: #ffa533;
+
+  text-align: center; /* Centraliza títulos dentro dos cards */
+
 }
 
+
+
 .form-grupo {
+
   text-align: left;
+
+  margin-bottom: 16px;
+
+}
+
+
+
+/* ESTILO NOVO PARA AS DATAS (Layout de duas colunas) */
+
+.form-grupo-datas {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  align-items: end; /* garante alinhamento dos campos na base */
   margin-bottom: 16px;
 }
 
-/* ESTILO NOVO PARA AS DATAS (Layout de duas colunas) */
-.form-grupo-datas {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-    margin-bottom: 16px;
-}
 .form-grupo-datas .form-grupo {
-    margin-bottom: 0; /* Remove a margem extra, já controlada pelo gap */
-}
-@media (max-width: 600px) {
-    .form-grupo-datas {
-        grid-template-columns: 1fr;
-    }
+  margin-bottom: 0;
 }
 
-.form-grupo label {
+.form-grupo-datas label {
   display: block;
+  font-size: 0.9rem;
+  color: #333;
   margin-bottom: 6px;
-  font-size: 14px;
-  color: #ccc;
 }
 
-input, select {
+.form-grupo-datas input[type="date"] {
   width: 100%;
   padding: 10px;
+  font-size: 0.95rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-sizing: border-box;
+}
+
+
+@media (max-width: 600px) {
+
+    .form-grupo-datas {
+
+        grid-template-columns: 1fr;
+
+    }
+
+}
+
+
+
+.form-grupo label {
+
+  display: block;
+
+  margin-bottom: 6px;
+
+  font-size: 14px;
+
+  color: #ccc;
+
+}
+
+
+
+input, select {
+
+  width: 100%;
+
+  padding: 10px;
+
   border-radius: 8px;
+
   border: 1px solid rgba(255,255,255,0.1);
+
   background: rgba(255,255,255,0.05);
+
   color: #fff;
-  /* Garante alinhamento consistente para o select */
-  -webkit-appearance: none; 
-  -moz-appearance: none; 
-  appearance: none; 
+
+  -webkit-appearance: none;
+
+  -moz-appearance: none;
+
+  appearance: none;
+
 }
+
 /* Estilo para setinha do select */
+
 select {
+
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%23ccc' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3E%3C/svg%3E");
+
     background-repeat: no-repeat;
+
     background-position: right 10px center;
+
     background-size: 12px;
+
 }
+
+
 
 /* NOVO: Estilo para as opções dentro do SELECT */
+
 select option {
-    color: #fff; 
-    background: #222; 
+
+    color: #fff;
+
+    background: #222;
+
     padding: 8px;
+
 }
+
+
 
 /* NOVO: Melhora o contraste da opção selecionada */
-select option:checked { 
+
+select option:checked {
+
     background-color: #ffa533;
-    color: #000; 
+
+    color: #000;
+
 }
 
+
+
 /* NOVO: Melhora o estilo de hover no dropdown */
+
 select option:hover {
+
     background-color: #ff8a05;
+
     color: #000;
+
 }
+
+
+
 
 
 /* Estiliza o placeholder para melhor visibilidade */
+
 input::placeholder {
+
     color: #888;
+
 }
+
+
 
 input:focus, select:focus {
+
   outline: none;
+
   border-color: #ffa533;
+
   background: rgba(255,255,255,0.08);
+
 }
+
+
 
 /* Estilo para o campo desabilitado */
+
 #grupo-aporte input:disabled {
+
     cursor: not-allowed;
+
     background-color: rgba(255,255,255,0.02);
+
     border-color: rgba(255,255,255,0.05);
+
     color: #888;
+
 }
+
+
 
 /* Estilos para o Checkbox NOVO */
+
 .checkbox-grupo {
+
     display: flex;
+
     align-items: center;
+
     margin-bottom: 25px;
+
     padding-top: 5px;
+
 }
+
+
 
 .checkbox-grupo input[type="checkbox"] {
+
     width: auto;
+
     height: 16px;
+
     margin-right: 10px;
+
     cursor: pointer;
+
     background: rgba(255,255,255,0.05);
+
     border: 1px solid rgba(255,255,255,0.2);
-}
-.checkbox-label {
-    margin-bottom: 0 !important;
-    font-size: 15px !important;
-    color: #ddd !important;
-    cursor: pointer;
+
 }
 
-/* Classe utilitária para esconder elementos */
-.hidden {
-    display: none !important;
+.checkbox-label {
+
+    margin-bottom: 0 !important;
+
+    font-size: 15px !important;
+
+    color: #ddd !important;
+
+    cursor: pointer;
+
 }
+
+
+
+/* Classe utilitária para esconder elementos */
+
+.hidden {
+
+    display: none !important;
+
+}
+
+
+
 
 
 .btn-calcular {
+
   background: linear-gradient(90deg, #ffa533, #ff8a05);
+
   border: none;
+
   padding: 12px 20px;
+
   width: 100%;
+
   border-radius: 8px;
+
   font-weight: 600;
+
   color: #000;
+
   transition: 0.3s;
+
   cursor: pointer;
+
 }
+
+
 
 .btn-calcular:hover {
+
   filter: brightness(1.1);
+
 }
+
+
 
 /* ===== RESULTADOS (MANTIDO) ===== */
+
 .resultado-container {
-  margin-top: 20px;
+
+  margin-top: 0;
+
+  /* Aplica o mesmo estilo de card para resultados e gráfico */
+
+  background: rgba(255,255,255,0.04);
+
+  padding: 20px;
+
+  border-radius: 14px;
+
+  border: 1px solid rgba(255,255,255,0.08);
+
 }
+
+
 
 .cards-resultado-detalhe {
+
     display: grid;
+
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+
     gap: 16px;
+
     margin-top: 20px;
+
 }
+
 @media (max-width: 600px) {
+
     .cards-resultado-detalhe {
+
         grid-template-columns: 1fr;
+
     }
+
 }
+
+
 
 .card-resultado {
+
   background: rgba(255,255,255,0.04);
+
   padding: 16px;
+
   border-radius: 12px;
+
   border: 1px solid rgba(255,255,255,0.1);
+
   transition: 0.2s;
+
   text-align: left;
+
 }
+
+
 
 .card-resultado:hover {
+
   border-color: #ffa533;
+
 }
+
+
 
 .card-resultado .label {
+
   font-size: 12px;
+
   color: #ccc;
+
   white-space: nowrap;
+
 }
+
+
 
 .card-resultado .valor {
+
   font-size: 18px;
+
   font-weight: 600;
+
   margin-top: 6px;
+
   color: #ffa533;
+
 }
 
-/* ===== GRÁFICO (CHART-SECTION) ===== */
-.chart-section .form-container {
-    /* Reutiliza o estilo do container do formulário para o fundo do gráfico */
-    background: rgba(255,255,255,0.04);
-    padding: 20px;
-    border-radius: 14px;
-    border: 1px solid rgba(255,255,255,0.08);
+
+
+/* ===== GRÁFICO (CHART-SECTION) - LARGURA TOTAL ===== */
+
+.chart-section {
+
+    margin-top: 30px; /* Espaçamento entre o layout lado a lado e o gráfico */
+
+    margin-bottom: 30px;
+
+    text-align: center;
+
 }
+
+.chart-section .form-container {
+
+    background: rgba(255,255,255,0.04);
+
+    padding: 20px;
+
+    border-radius: 14px;
+
+    border: 1px solid rgba(255,255,255,0.08);
+
+}
+
+
 
 .chart-section h2 {
-    margin-top: 0 !important;
-    margin-bottom: 20px;
-}
 
-/* Ajuste da margem superior do container de resultados no painel direito */
-.right-panel .resultado-container {
-    margin-top: 0; 
+    margin-top: 0 !important;
+
+    margin-bottom: 20px;
+
 }
